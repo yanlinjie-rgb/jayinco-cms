@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAYINCO CMS — 一键初始化 Supabase</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#f0f2f5; color:#1a1a2e; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card { background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.08); max-width:680px; width:100%; padding:40px; }
+  h1 { font-size:22px; margin-bottom:8px; color:#c0392b; }
+  .sub { color:#666; font-size:14px; margin-bottom:28px; line-height:1.5; }
+
+  .field { margin-bottom:18px; }
+  label { display:block; font-size:13px; font-weight:600; margin-bottom:5px; color:#444; }
+  input, textarea { width:100%; padding:10px 12px; border:1.5px solid #ddd; border-radius:8px; font-size:14px; transition:border-color .2s; outline:none; }
+  input:focus, textarea:focus { border-color:#c0392b; }
+  textarea { resize:vertical; min-height:80px; font-family:'Consolas','Monaco',monospace; font-size:12px; }
+
+  .btn-row { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+  button { padding:11px 22px; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-primary { background:#c0392b; color:#fff; flex:1; }
+  .btn-primary:hover { background:#a93226; transform:translateY(-1px); }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; transform:none; }
+  .btn-secondary { background:#f0f0f0; color:#333; }
+  .btn-secondary:hover { background:#e0e0e0; }
+
+  #log { margin-top:20px; background:#1a1a2e; color:#0f0; border-radius:10px; padding:16px; font-family:'Consolas','Monaco',monospace; font-size:12px; line-height:1.7; max-height:360px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; display:none; }
+  #log.show { display:block; }
+  .log-err { color:#ff6b6b; }
+  .log-warn { color:#ffd93d; }
+  .log-ok { color:#6bff8e; }
+  .log-info { color:#88ccff; }
+
+  .badge { display:inline-block; padding:3px 9px; border-radius:12px; font-size:11px; font-weight:700; margin-left:8px; vertical-align:middle; }
+  .badge-ready { background:#e8f5e9; color:#2e7d32; }
+  .badge-running { background:#fff3e0; color:#e65100; }
+  .badge-done { background:#e3f2fd; color:#1565c0; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>🚀 JAYINCO CMS 一键初始化</h1>
+  <p class="sub">在你的浏览器里自动完成：① 执行数据库建表 SQL（表+权限+图床桶）② 创建后台管理员账号<br>⚠️ 本页面仅在你本地浏览器运行，不会上传任何数据到第三方。</p>
+
+  <div class="field">
+    <label>Supabase 项目 Ref（从 URL 或 General 页面复制）</label>
+    <input id="ref" value="rxbjkxkduhwofsnlpqki" placeholder="例如 rxbjkxkduhwofsnlpqki">
+  </div>
+
+  <div class="field">
+    <label>Access Token（PAT，从 Access Tokens 页面生成）</label>
+    <input id="pat" type="password" placeholder="sbp_... 或 eyJ..." autocomplete="off">
+  </div>
+
+  <div class="field">
+    <label>管理员邮箱</label>
+    <input id="email" value="admin@jayinco.com" type="email">
+  </div>
+
+  <div class="field">
+    <label>管理员密码</label>
+    <input id="pass" type="password" value="YANLINjie1688." autocomplete="new-password">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" id="goBtn" onclick="runAll()">▶ 一键全部执行</button>
+    <button class="btn-secondary" onclick="runSQL()">仅建表 (SQL)</button>
+    <button class="btn-secondary" onclick="createUser()">仅建账号</button>
+  </div>
+
+  <div id="log"></div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const logEl = $('#log');
+
+function log(msg, cls='') {
+  if (!logEl.classList.contains('show')) logEl.classList.add('show');
+  const span = document.createElement('span');
+  span.className = cls;
+  span.textContent = msg + '\n';
+  logEl.appendChild(span);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function api(method, path, body) {
+  const url = `https://api.supabase.com/v1/projects/${$('#ref').value.trim()}${path}`;
+  return fetch(url, {
+    method,
+    headers: {
+      'Authorization': `Bearer ${$('#pat').value.trim()}`,
+      'Content-Type': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  }).then(r => r.json().then(d => ({ status: r.status, data: d })));
+}
+
+// ── SQL Schema ──
+const SCHEMA_SQL = `-- ═══ 1. 产品表 products ═══
+create table if not exists public.products (
+  id              uuid        primary key default gen_random_uuid(),
+  category        text        not null default 'wire-to-board',
+  name_zh         text        not null default '',
+  name_en         text        not null default '',
+  spec            text        default '',
+  model           text        default '',
+  packaging       text        default '',
+  description_zh  text        default '',
+  description_en  text        default '',
+  image_url       text        default '',
+  pdf_url         text        default '',
+  basic_info_zh   text        default '',
+  basic_info_en   text        default '',
+  molde_code      jsonb       default '[]'::jsonb,
+  dimensions_img  text        default '',
+  product_desc_zh text        default '',
+  product_desc_en text        default '',
+  related         jsonb       default '[]'::jsonb,
+  sort_order      int         default 0,
+  created_at      timestamptz default now()
+);
+
+create index if not exists products_category_idx on public.products (category);
+create index if not exists products_sort_idx     on public.products (sort_order);
+
+-- ═══ 2. 文章表 articles ═══
+create table if not exists public.articles (
+  id            uuid        primary key default gen_random_uuid(),
+  title_zh      text        not null default '',
+  title_en      text        not null default '',
+  body_zh       text        default '',
+  body_en       text        default '',
+  cover_image   text        default '',
+  published     boolean     default true,
+  published_at  timestamptz default now(),
+  created_at    timestamptz default now()
+);
+
+create index if not exists articles_published_idx on public.articles (published, published_at desc);
+
+-- ═══ 3. 站点内容表 site_content ═══
+create table if not exists public.site_content (
+  key         text        primary key,
+  type        text        not null default 'text',
+  value_zh    text        default '',
+  value_en    text        default '',
+  updated_at  timestamptz default now()
+);
+
+-- RLS
+alter table public.products      enable row level security;
+alter table public.articles      enable row level security;
+alter table public.site_content  enable row level security;
+
+drop policy if exists "public read products" on public.products;
+create policy "public read products" on public.products for select using (true);
+drop policy if exists "auth write products" on public.products;
+create policy "auth write products" on public.products for all using (auth.role()='authenticated') with check (auth.role()='authenticated');
+
+drop policy if exists "public read articles" on public.articles;
+create policy "public read articles" on public.articles for select using (true);
+drop policy if exists "auth write articles" on public.articles;
+create policy "auth write articles" on public.articles for all using (auth.role()='authenticated') with check (auth.role()='authenticated');
+
+drop policy if exists "public read site_content" on public.site_content;
+create policy "public read site_content" on public.site_content for select using (true);
+drop policy if exists "auth write site_content" on public.site_content;
+create policy "auth write site_content" on public.site_content for all using (auth.role()='authenticated') with check (auth.role()='authenticated');
+
+-- 存储桶 cms-images
+insert into storage.buckets (id,name,public) values ('cms-images','cms-images',true) on conflict(id) do nothing;
+
+drop policy if exists "public read cms-images" on storage.objects;
+create policy "public read cms-images" on storage.objects for select using (bucket_id='cms-images');
+drop policy if exists "auth upload cms-images" on storage.objects;
+create policy "auth upload cms-images" on storage.objects for insert with check (bucket_id='cms-images' and auth.role()='authenticated');
+drop policy if exists "auth update cms-images" on storage.objects;
+create policy "auth update cms-images" on storage.objects for update using (bucket_id='cms-images' and auth.role()='authenticated') with check (bucket_id='cms-images' and auth.role()='authenticated');
+drop policy if exists "auth delete cms-images" on storage.objects;
+create policy "auth delete cms-images" on storage.objects for delete using (bucket_id='cms-images' and auth.role()='authenticated');
+
+-- 预置数据
+insert into public.site_content (key,type,value_zh,value_en) values
+  ('hero_products_title','text','全面的连接器产品矩阵','Comprehensive Connector Portfolio'),
+  ('hero_products_sub','text','从标准互连到汽车级高可靠方案，覆盖各类应用场景。','From standard interconnection to automotive-grade reliability.'),
+  ('banner_products','image','',''),
+  ('banner_about','image','',''),
+  ('banner_news','image','',''),
+  ('banner_contact','image','','')
+on conflict(key) do nothing;`;
+
+async function runSQL() {
+  const ref = $('#ref').value.trim();
+  const pat = $('#pat').value.trim();
+  if (!ref || !pat) { log('❌ 请填写项目 Ref 和 PAT', 'log-err'); return; }
+
+  log('📦 [Step 1/2] 正在执行 supabase-schema.sql ...', 'log-info');
+  $('#goBtn').disabled = true;
+
+  try {
+    const res = await api('POST', '/database/query', { query: SCHEMA_SQL });
+    if (res.status === 200 || res.status === 201) {
+      log(`✅ SQL 执行成功！HTTP ${res.status}`, 'log-ok');
+      if (res.data.result && Array.isArray(res.data.result)) {
+        res.data.result.forEach(r => log(`   → ${JSON.stringify(r).slice(0,120)}`));
+      } else if (res.data.error) {
+        log(`⚠️ 返回含 error 字段: ${res.data.error}`, 'log-warn');
+      }
+    } else {
+      log(`❌ SQL 执行失败 HTTP ${res.status}: ${JSON.stringify(res.data).slice(0,300)}`, 'log-err');
+    }
+  } catch(e) {
+    log(`❌ 网络错误: ${e.message}`, 'log-err');
+  }
+  $('#goBtn').disabled = false;
+}
+
+async function createUser() {
+  const ref = $('#ref').value.trim();
+  const pat = $('#pat').value.trim();
+  const email = $('#email').value.trim();
+  const pass = $('#pass').value;
+  if (!ref || !pat || !email || !pass) { log('❌ 请填写所有字段', 'log-err'); return; }
+
+  log(`👤 [Step 2/2] 创建管理员 ${email} ...`, 'log-info');
+  $('#goBtn').disabled = true;
+
+  // 尝试多个管理 API 路径
+  const paths = ['/auth/users', '/admin/users'];
+  let created = false;
+
+  for (const path of paths) {
+    try {
+      const res = await api('POST', path, {
+        email,
+        password: pass,
+        email_confirm: true,
+        auto_confirm: true,
+      });
+      log(`   POST ${path} → HTTP ${res.status}`, res.status===200||res.status===201 ? 'log-ok' : 'log-warn');
+      if (res.status === 200 || res.status === 201) {
+        log(`✅ 管理员创建成功！邮箱: ${email}`, 'log-ok');
+        log(`   密码: ${'*'.repeat(pass.length)}`, 'log-info');
+        created = true;
+        break;
+      } else {
+        const detail = typeof res.data === 'object' ? (res.data.message || res.data.error || JSON.stringify(res.data)) : res.data;
+        log(`   → ${String(detail).slice(0,200)}`, 'log-warn');
+      }
+    } catch(e) {
+      log(`   → 异常: ${e.message}`, 'log-err');
+    }
+  }
+
+  if (!created) {
+    log('', '');
+    log('📋 自动创建失败，请手动操作（30秒搞定）：', 'log-warn');
+    log('   ① 打开 https://supabase.com/dashboard/project/' + ref + '/auth/users', 'log-info');
+    log('   ② 点右上角 "Add user" / "New user"', 'log-info');
+    log('   ③ Email 填: ' + email, 'log-info');
+    log('   ④ Password 填: ' + pass, 'log-info');
+    log('   ⑤ ✅ 勾选 "Auto Confirm User"', 'log-info');
+    log('   ⑥ 点 "Create user"', 'log-info');
+  }
+  $('#goBtn').disabled = false;
+}
+
+async function runAll() {
+  logEl.innerHTML = '';
+  log('═══ JAYINCO CMS 一键初始化开始 ═══', 'log-info');
+  log(`项目 Ref: ${$('#ref').value.trim()}`, 'log-info');
+  log(`管理员: ${$('#email').value.trim()}`, 'log-info');
+  log('', '');
+
+  await runSQL();
+  log('', '');
+  await createUser();
+
+  log('', '');
+  log('═══ 初始化完成！下一步：打开 admin.html 登录测试 ═══', 'log-ok');
+}
+</script>
+</body>
+</html>
