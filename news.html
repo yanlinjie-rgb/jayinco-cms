@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新闻中心 - 佳盈盛电子 JAYINCO | News</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#E2231A;--primary-d:#B71C1C;--accent:#FF5722;
+  --bg:#ffffff;--bg2:#f7f6f5;--text:#1a1a1a;--muted:#555;
+  --line:#e8e8ea;--card:#ffffff;--radius:6px;
+  --shadow:0 6px 24px rgba(226,35,26,.08);
+  --nav-bg:rgba(255,255,255,.95);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.en{display:none;}.zh{display:inline;}.zh.block{display:block;}
+#langToggle:checked ~ * .en{display:inline;}#langToggle:checked ~ * .en.block{display:block;}
+#langToggle:checked ~ * .zh{display:none;}#langToggle:checked ~ * .zh.block{display:none;}
+
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);}
+.logo img{height:40px;width:auto;}
+.logo-text .lt{font-weight:900;font-size:17px;letter-spacing:.02em;color:var(--text);}
+.logo-text .ls{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;font-weight:600;font-size:14px;color:var(--text);opacity:.75;transition:.2s;padding:6px 0;border-bottom:2px solid transparent;}
+.nav-links a:hover,a.active{opacity:1;color:var(--primary);border-bottom-color:var(--primary);}
+.lang-toggle{display:flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin-left:16px;}
+.lang-toggle label{background:transparent;border:none;padding:6px 14px;font:700 12px/1 sans-serif;color:var(--muted);cursor:pointer;display:block;transition:.15s;}
+#langToggle:not(:checked)~* label[for="langZh"],#langToggle:checked~* label[for="langEn"]{background:var(--primary);color:#fff;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+.section{padding:70px 0;}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.15em;color:var(--primary);margin-bottom:10px;text-transform:uppercase;}
+h2{font-weight:900;font-size:32px;color:var(--text);line-height:1.25;}
+p{color:var(--muted);font-size:15px;}
+
+.page-hero{padding:80px 0 56px;background:url('banner-news.png') center/cover no-repeat;position:relative;}
+.page-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.55),rgba(226,35,26,.25));}
+.page-hero .wrap{position:relative;z-index:1;}
+.page-hero .eyebrow{color:rgba(255,255,255,.85);}
+.page-hero h1{font-weight:900;font-size:38px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3);}
+
+/* ═══ NEWS LIST ═══ */
+.news-list{margin-top:36px;}
+.news-card{display:flex;gap:24px;padding:28px 0;border-bottom:1px solid var(--line);transition:.15s;}
+.news-card:hover{background:var(--bg2);padding-left:12px;padding-right:12px;margin:0 -12px;}
+.news-date-col{min-width:90px;text-align:center;}
+.news-date-d{font-weight:900;font-size:32px;color:var(--primary);line-height:1;}
+.news-date-m{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em;}
+.news-body h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.4;}
+.news-body p{font-size:14px;line-height:1.7;}
+.news-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:rgba(226,35,26,.08);color:var(--primary);margin-right:8px;margin-bottom:8px;}
+
+footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:40px;}
+.foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;}
+footer h4{font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em;}
+footer a{color:#9aa0a8;text-decoration:none;font-size:13.5px;line-height:2.2;display:block;transition:.15s;}
+footer a:hover{color:var(--primary);}
+footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
+.foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-logo img{height:32px;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 0;display:flex;justify-content:space-between;font-size:12.5px;opacity:.45;}
+
+.text-center{text-align:center;}
+.mt-2{margin-top:18px;}
+.mb-2{margin-bottom:20px;}
+
+@media(max-width:900px){
+  .news-card{flex-direction:column;gap:12px;}
+  .news-date-col{text-align:left;display:flex;align-items:center;gap:12px;}
+  .foot-main{grid-template-columns:1fr 1fr;gap:26px;}
+  .nav-links{display:none;}
+  .page-hero h1{font-size:30px;}
+}
+@media(max-width:480px){.foot-main{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<input type="checkbox" id="langToggle" hidden>
+
+<!-- ═══ NAV ═══ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="logo.png" alt="JAYINCO Logo"><div class="logo-text"><div class="lt">佳盈盛电子</div><div class="ls">JAYINCO</div></div></a>
+    <div style="display:flex;align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a></li>
+        <li><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a></li>
+        <li><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a></li>
+        <li><a href="news.html" class="active"><span class="zh">新闻中心</span><span class="en">News</span></a></li>
+        <li><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a></li>
+      </ul>
+      <div class="lang-toggle"><label for="langToggle" id="langZh">中文</label><label for="langToggle" id="langEn">EN</label></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero" data-cms-bg="banner_news">
+  <div class="wrap">
+    <div class="eyebrow"><span class="zh">新闻中心</span><span class="en">News Center</span></div>
+    <h1 data-cms="hero_news_title"><span class="zh">企业动态<br>&amp; 行业资讯</span><span class="en block">Company News<br>&amp; Industry Updates</span></h1>
+  </div>
+</section>
+
+<!-- ═══ NEWS LIST ═══ -->
+<section class="section">
+  <div class="wrap news-list" id="staticNewsList">
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">12</div><div class="news-date-m">2026.08</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">新品发布</span><span class="en">New Product</span></span>
+        <h3><span class="zh">JAYINCO 推出新一代高速板对板连接器系列，支持 56Gbps 传输速率</span><span class="en block">JAYINCO Launches New High-Speed Board-to-Board Series Supporting 56Gbps</span></h3>
+        <p><span class="zh">该系列采用新型差分信号设计，最小间距 0.4mm，专为数据中心、5G 基站和高速通信设备打造。产品已通过多项可靠性测试，预计 Q3 开始批量供货。</span><span class="en block">Featuring novel differential signal design with 0.4mm minimum pitch, purpose-built for data centers, 5G base stations and high-speed comms equipment. Passed multiple reliability tests, mass production expected Q3.</span></p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">20</div><div class="news-date-m">2026.06</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">认证</span><span class="en">Certification</span></span>
+        <h3><span class="zh">顺利通过 IATF16949 汽车行业质量体系认证，车规级制造能力获国际认可</span><span class="en block">IATF16949 Automotive Certification Achieved — International Recognition for Auto-Grade Manufacturing</span></h3>
+        <p><span class="zh">经过为期一年的严格审核，JAYINCO 正式获得 IATF16949:2016 汽车行业质量管理体系认证。这标志着公司在汽车级连接器领域的研发、生产与品质管控能力达到国际先进水平。</span><span class="en block">After a rigorous one-year audit, JAYINCO officially achieved IATF16949:2016 certification — marking international-level capability in automotive connector R&amp;D, production and quality control.</span></p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">15</div><div class="news-date-m">2026.04</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">展会</span><span class="en">Exhibition</span></span>
+        <h3><span class="zh">亮相 2026 慕尼黑上海电子展 (electronica China)，多款新品吸引国际买家关注</span><span class="en block">Exhibited at electronica China 2026 — New Products Attract Global Buyer Interest</span></h3>
+        <p><span class="zh">JAYINCO 携线对板、防水及汽车级连接器等多款新品参展，现场与来自欧美、东南亚的数十家客户达成初步合作意向。</span><span class="en block">Showcased wire-to-board, waterproof and automotive-grade connector novelties, establishing preliminary cooperation intentions with dozens of customers from Europe, Americas and Southeast Asia.</span></p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">08</div><div class="news-date-m">2026.02</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">产能</span><span class="en">Capacity</span></span>
+        <h3><span class="zh">三期厂房正式投产，月产能提升至 5000 万件</span><span class="en block">Phase III Facility Officially Online — Monthly Capacity Reaches 50 Million Units</span></h3>
+        <p><span class="zh">新增 8,000 平方米自动化产线，引入 AOI 全检设备与智能仓储系统。产能翻倍的同时，交付周期缩短 30%。</span><span class="en block">Added 8,000 m&sup2; of automated production lines with AOI full-inspection and smart warehousing. Capacity doubled while lead time reduced by 30%.</span></p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">18</div><div class="news-date-m">2025.11</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">技术</span><span class="en">Technology</span></span>
+        <h3><span class="zh">自主研发的 IP68 防水连接器系列通过第三方权威检测</span><span class="en block">In-House IP68 Waterproof Connector Series Passes Third-Party Testing</span></h3>
+        <p><span class="zh">该系列产品在浸水 72 小时、盐雾 96 小时等严苛测试中表现优异，已开始向户外照明和新能源领域客户批量供货。</span><span class="en block">Excelled in rigorous tests including 72-hour submersion and 96-hour salt spray. Now shipping to outdoor lighting and new energy sector customers.</span></p>
+      </div>
+    </div>
+
+    <div class="news-card">
+      <div class="news-date-col"><div class="news-date-d">05</div><div class="news-date-m">2025.09</div></div>
+      <div class="news-body">
+        <span class="news-tag"><span class="zh">合作</span><span class="en">Partnership</span></span>
+        <h3><span class="zh">与欧洲知名工业自动化企业达成战略合作协议</span><span class="en block">Strategic Partnership Signed with European Industrial Automation Leader</span></h3>
+        <p><span class="zh">JAYINCO 正式成为该企业在亚太地区的指定连接器供应商，首批订单涵盖定制化板对板连接器产品。</span><span class="en block">JAYINCO officially designated as the company's APAC connector supplier, with the first order covering customized board-to-board connectors.</span></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ DYNAMIC NEWS (CMS) ═══ -->
+<div id="cmsNewsList" style="display:none"></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="JAYINCO"></div>
+      <p><span class="zh">专业连接器制造商，致力为全球客户提供高可靠的互连解决方案。</span><span class="en block">Professional connector manufacturer delivering reliable interconnection solutions worldwide.</span></p>
+    </div>
+    <div>
+      <h4><span class="zh">快速链接</span><span class="en">Quick Links</span></h4>
+      <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">主要产品</span><span class="en">Products</span></h4>
+      <a href="products.html"><span class="zh">线对板连接器</span><span class="en">Wire-to-Board</span></a><a href="products.html"><span class="zh">板对板连接器</span><span class="en">Board-to-Board</span></a><a href="products.html"><span class="zh">线对线连接器</span><span class="en">Wire-to-Wire</span></a><a href="products.html"><span class="zh">USB连接器</span><span class="en">USB Connectors</span></a><a href="products.html"><span class="zh">RF射频连接器</span><span class="en">RF Coaxial</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
+      <p style="font-weight:700;color:#e0e0e0;">JAYINCO (佳盈盛电子)</p>
+      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan<br>Guangdong, China</span></p>
+      <p>sales@jayinco.com</p>
+      <p>+86 769 XXXX XXXX</p>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>&copy; 2026 JAYINCO 佳盈盛电子. <span class="zh">版权所有。</span><span class="en">All rights reserved.</span></span>
+    <span>China &middot; 中国</span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script src="cms.js"></script>
+</body>
+</html>
