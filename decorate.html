@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>页面装修 · JAYINCO 后台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E2231A;--primary-d:#B71C1C;--bg:#f5f6f8;--card:#fff;--text:#1a1a1a;--muted:#666;--line:#e3e5e9;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);}
+/* 顶栏 */
+.topbar{position:sticky;top:0;z-index:9000;background:#111618;color:#fff;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.topbar .l{display:flex;align-items:center;gap:12px;font-weight:800;}
+.topbar .logo{width:32px;height:32px;background:var(--primary);border-radius:7px;display:grid;place-items:center;font-weight:900;}
+.bar-r{display:flex;align-items:center;gap:12px;}
+.bar-r select{font:600 14px/1 inherit;padding:8px 12px;border-radius:8px;border:none;background:#fff;color:#222;cursor:pointer;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-weight:700;font-size:14px;border:2px solid var(--primary);background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;}
+.btn:hover{background:var(--primary-d);border-color:var(--primary-d);}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);}
+.btn-ghost:hover{background:rgba(255,255,255,.1);}
+.main{padding:16px;}
+.iframe-wrap{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;}
+iframe{width:100%;height:calc(100vh - 90px);border:none;display:block;}
+.hint{font-size:13px;color:var(--muted);margin:0 0 12px;}
+/* 编辑弹窗 */
+.edit-pop{position:fixed;top:70px;right:20px;width:340px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);z-index:9100;display:none;padding:18px;}
+.edit-pop h4{font-size:15px;font-weight:800;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;}
+.edit-pop .key{font-size:11px;color:var(--muted);font-family:monospace;margin-bottom:12px;word-break:break-all;}
+.edit-pop label{font-size:12px;font-weight:700;display:block;margin:10px 0 4px;}
+.edit-pop textarea,.edit-pop input{width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:7px;font:inherit;font-size:13px;box-sizing:border-box;}
+.edit-pop textarea{min-height:70px;resize:vertical;}
+.edit-pop .img-row{display:flex;gap:8px;align-items:center;}
+.edit-pop .img-row img{width:54px;height:54px;object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#f5f4f3;}
+.edit-pop .actions{display:flex;justify-content:space-between;margin-top:14px;gap:8px;}
+.edit-pop .close{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;line-height:1;}
+.saved-tip{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#2e7d32;color:#fff;padding:10px 22px;border-radius:8px;z-index:9200;display:none;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+.login-tip{padding:60px 24px;text-align:center;color:var(--muted);}
+.login-tip a{color:var(--primary);font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="l"><div class="logo">J</div><span>页面装修 · 可视化编辑</span></div>
+  <div class="bar-r">
+    <select id="pageSel">
+      <option value="index.html">首页</option>
+      <option value="products.html">产品中心</option>
+      <option value="about.html">关于我们</option>
+      <option value="news.html">新闻中心</option>
+      <option value="contact.html">联系我们</option>
+    </select>
+    <button class="btn" id="saveBtn">💾 保存修改</button>
+    <button class="btn btn-ghost" id="exitBtn" onclick="location.href='admin.html'">退出</button>
+  </div>
+</div>
+
+<div class="main">
+  <p class="hint">点击页面中高亮（虚线框）的元素即可就地编辑文字或图片，编辑后点右上角「💾 保存修改」统一提交。使用「删除」可恢复为原始静态内容。</p>
+  <div class="iframe-wrap">
+    <iframe id="frame" src="index.html"></iframe>
+  </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div class="edit-pop" id="pop">
+  <h4>编辑内容 <button class="close" id="popClose">&times;</button></h4>
+  <div class="key" id="popKey"></div>
+  <div id="popFields"></div>
+  <div class="actions">
+    <button class="btn btn-ghost" id="popDelete" style="border-color:#c62828;color:#c62828;">删除此装修</button>
+    <div>
+      <button class="btn btn-ghost" id="popCancel">取消</button>
+      <button class="btn" id="popApply">应用预览</button>
+    </div>
+  </div>
+</div>
+
+<div class="saved-tip" id="savedTip">✔ 已保存</div>
+<div class="login-tip" id="loginTip" style="display:none;">
+  请先在 <a href="admin.html" target="_blank">后台</a> 登录后再使用装修功能（本页与后台共用登录状态）。
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@ *2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script>
+(function(){
+  var C = window.CMS;
+  var sb = C ? C.sb : null;
+  var frame = document.getElementById('frame');
+  var pop = document.getElementById('pop');
+  var popKeyEl = document.getElementById('popKey');
+  var popFields = document.getElementById('popFields');
+  var current = { key:null, type:null, original:null };
+  var changes = {}; // key -> {type, value_zh, value_en}
+
+  // 若未登录，提示去登录
+  if(!C || !C.configured || !sb){
+    document.getElementById('loginTip').style.display='block';
+    return;
+  }
+  sb.auth.getSession().then(function(r){
+    if(!r.data.session){ document.getElementById('loginTip').style.display='block'; }
+  });
+
+  // 页面切换
+  document.getElementById('pageSel').addEventListener('change', function(){
+    frame.src = this.value;
+  });
+
+  // iframe 加载后注入编辑覆盖层
+  frame.addEventListener('load', function(){
+    setTimeout(injectEditor, 600); // 等 cms.js 应用完内容
+  });
+
+  function injectEditor(){
+    var doc = frame.contentDocument;
+    if(!doc){ return; }
+    // 注入样式
+    if(!doc.getElementById('__decoStyle')){
+      var st = doc.createElement('style');
+      st.id='__decoStyle';
+      st.textContent = '[data-cms],[data-cms-img],[data-cms-bg]{outline:2px dashed #E2231A;outline-offset:2px;cursor:pointer;position:relative;}'+
+        '[data-cms]:hover,[data-cms-img]:hover,[data-cms-bg]:hover{outline-color:#B71C1C;background:rgba(226,35,26,.05);}';
+      doc.head.appendChild(st);
+    }
+    clearHandlers(doc);
+    markEditable(doc);
+  }
+
+  function clearHandlers(doc){
+    var all = doc.querySelectorAll('[data-cms],[data-cms-img],[data-cms-bg]');
+    all.forEach(function(el){ el.onclick = null; });
+  }
+
+  function markEditable(doc){
+    var all = doc.querySelectorAll('[data-cms]');
+    all.forEach(function(el){
+      el.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        openEditorFor(el, 'text', doc);
+      };
+    });
+    var imgs = doc.querySelectorAll('[data-cms-img]');
+    imgs.forEach(function(el){
+      el.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        openEditorFor(el, 'image', doc);
+      };
+    });
+    var bgs = doc.querySelectorAll('[data-cms-bg]');
+    bgs.forEach(function(el){
+      el.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        openEditorFor(el, 'bg', doc);
+      };
+    });
+  }
+
+  function getCurrentValues(el, type){
+    if(type==='image'){
+      return el.getAttribute('src')||'';
+    }
+    if(type==='bg'){
+      return (el.style.backgroundImage||'').replace(/^url\(['"]?/,'').replace(/['"]?\)$/,'');
+    }
+    // text
+    var zh = el.querySelector('.zh');
+    var en = el.querySelector('.en');
+    if(zh||en){
+      return {zh: zh?zh.textContent:'', en: en?en.textContent:''};
+    }
+    return el.textContent||'';
+  }
+
+  function openEditorFor(el, type, doc){
+    current = { key:null, type:type, doc:doc, el:el };
+    var key;
+    if(type==='image') key = el.getAttribute('data-cms-img');
+    else if(type==='bg') key = el.getAttribute('data-cms-bg');
+    else key = el.getAttribute('data-cms');
+    current.key = key;
+    var val = getCurrentValues(el, type);
+    popKeyEl.textContent = '键: ' + key + (type!=='text'?('（'+type+'）'):'');
+
+    if(type==='text'){
+      if(typeof val === 'object'){
+        popFields.innerHTML =
+          '<label>中文</label><textarea id="fZ">'+esc(val.zh)+'</textarea>'+
+          '<label>English</label><textarea id="fE">'+esc(val.en)+'</textarea>';
+      } else {
+        popFields.innerHTML = '<label>内容</label><textarea id="fZ">'+esc(val)+'</textarea>';
+      }
+    } else {
+      var prev = val ? '<img id="fPrev" src="'+esc(val)+'" style="margin-top:6px">' : '';
+      popFields.innerHTML =
+        '<label>图片 URL</label>'+
+        '<div class="img-row"><input id="fImg" value="'+esc(val)+'" style="flex:1">'+
+        '<input type="file" id="fFile" accept="image/*" style="width:auto"></div>'+ prev +
+        '<button class="btn btn-gray btn-sm" id="fUp" style="margin-top:8px;">上传图片</button>';
+    }
+    pop.style.display='block';
+  }
+
+  document.getElementById('popClose').onclick = closePop;
+  document.getElementById('popCancel').onclick = closePop;
+  document.getElementById('popApply').onclick = function(){
+    applyCurrent();
+    pop.style.display='none';
+  };
+  document.getElementById('popDelete').onclick = function(){
+    if(!current.key) return;
+    changes[current.key] = { delete:true, type:current.type };
+    if(current.el){
+      // 恢复原始（重新加载静态默认由下次刷新决定；此处先清空覆盖）
+      if(current.type==='image') current.el.src='';
+      else if(current.type==='bg') current.el.style.backgroundImage='';
+      else {
+        if(current.el.querySelector('.zh')){ current.el.querySelector('.zh').textContent=''; }
+        if(current.el.querySelector('.en')){ current.el.querySelector('.en').textContent=''; }
+        if(!current.el.querySelector('.zh') && !current.el.querySelector('.en')){ current.el.textContent=''; }
+      }
+    }
+    pop.style.display='none';
+    showTip('已标记为删除（保存后生效）');
+  };
+  document.getElementById('fUp') && (document.getElementById('fUp').onclick = function(){
+    // 简易上传占位：直接取文件转 base64 太重，改为提示用 URL；这里仅支持 URL
+    alert('请直接粘贴图片 URL（图床/外链均可），上传功能可在后台「产品/文章」上传后复制链接。');
+  });
+
+  function applyCurrent(){
+    if(!current.key) return;
+    var vz, ve;
+    if(current.type==='text'){
+      if(current.el.querySelector('.zh')||current.el.querySelector('.en')){
+        vz = document.getElementById('fZ').value;
+        ve = document.getElementById('fE').value;
+      } else {
+        vz = document.getElementById('fZ').value; ve = vz;
+      }
+      // 实时预览
+      if(current.el.querySelector('.zh')) current.el.querySelector('.zh').textContent = vz;
+      if(current.el.querySelector('.en')) current.el.querySelector('.en').textContent = ve;
+      if(!current.el.querySelector('.zh') && !current.el.querySelector('.en')) current.el.textContent = vz;
+      changes[current.key] = { type:'text', value_zh:vz, value_en:ve };
+    } else {
+      var url = document.getElementById('fImg').value.trim();
+      if(current.type==='image') current.el.src = url;
+      else current.el.style.backgroundImage = "url('"+url+"')";
+      changes[current.key] = { type:'image', value_zh:url, value_en:url };
+    }
+  }
+
+  function closePop(){ pop.style.display='none'; }
+
+  document.getElementById('saveBtn').onclick = async function(){
+    var keys = Object.keys(changes);
+    if(!keys.length){ showTip('没有改动'); return; }
+    var ok=0, fail=0;
+    for(var i=0;i<keys.length;i++){
+      var k = keys[i];
+      var c = changes[k];
+      try{
+        if(c.delete){
+          var d = await sb.from('site_content').delete().eq('key', k);
+          if(d.error) fail++; else ok++;
+        } else {
+          var u = await sb.from('site_content').upsert({key:k, type:c.type==='image'?'image':'text', value_zh:c.value_zh, value_en:c.value_en});
+          if(u.error) fail++; else ok++;
+        }
+      }catch(e){ fail++; }
+    }
+    changes = {};
+    showTip('已保存 '+ok+' 项'+(fail?('，失败 '+fail):''));
+  };
+
+  function showTip(msg){
+    var t = document.getElementById('savedTip');
+    t.textContent = msg;
+    t.style.display='block';
+    setTimeout(function(){ t.style.display='none'; }, 2200);
+  }
+  function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+})();
+</script>
+</body>
+</html>
