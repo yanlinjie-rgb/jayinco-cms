@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品详情 - 佳盈盛电子 JAYINCO | Product Detail</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#E2231A;--primary-d:#B71C1C;--accent:#FF5722;
+  --bg:#ffffff;--bg2:#f5f4f3;--text:#1a1a1a;--muted:#666;
+  --line:#e0dedc;--card:#ffffff;--radius:6px;
+  --shadow:0 4px 20px rgba(226,35,26,.07);
+  --nav-bg:rgba(255,255,255,.96);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.en{display:none;}.zh{display:inline;}.zh.block{display:block;}
+#langToggle:checked ~ * .en{display:inline;}#langToggle:checked ~ * .en.block{display:block;}
+#langToggle:checked ~ * .zh{display:none;}#langToggle:checked ~ * .zh.block{display:none;}
+
+/* ═══ NAV ═══ */
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.nav-inner{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);}
+.logo img{height:40px;width:auto;}
+.logo-text .lt{font-weight:900;font-size:17px;letter-spacing:.02em;color:var(--text);}
+.logo-text .ls{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;font-weight:600;font-size:14px;color:var(--text);opacity:.75;transition:.2s;padding:6px 0;border-bottom:2px solid transparent;}
+.nav-links a:hover,a.active{opacity:1;color:var(--primary);border-bottom-color:var(--primary);}
+.lang-toggle{display:flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin-left:16px;}
+.lang-toggle label{background:transparent;border:none;padding:6px 14px;font:700 12px/1 sans-serif;color:var(--muted);cursor:pointer;display:block;transition:.15s;}
+#langToggle:not(:checked)~* label[for="langZh"],#langToggle:checked~* label[for="langEn"]{background:var(--primary);color:#fff;}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px;}
+
+/* ═══ BREADCRUMB ═══ */
+.breadcrumb{padding:14px 0;font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:.15s;}
+.breadcrumb a:hover{color:var(--primary);}
+.breadcrumb span.sep{margin:0 8px;opacity:.4;}
+
+/* ═══ PRODUCT DETAIL HERO ═══ */
+.detail-hero{padding:36px 0 40px;background:linear-gradient(135deg,#fafafa,#f2f0ee);border-bottom:1px solid var(--line);}
+
+.detail-main{display:flex;gap:44px;align-items:flex-start;}
+.detail-img-box{width:440px;flex-shrink:0;background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);padding:40px;display:grid;place-items:center;position:relative;}
+.detail-img-box img{max-width:360px;max-height:340px;object-fit:contain;}
+.detail-img-box .placeholder-svg{width:220px;height:200px;stroke:var(--primary);fill:none;stroke-width:1.2;opacity:.3;}
+/* Corner ribbon like dg-switch */
+.ribbon-corner{position:absolute;top:0;left:0;width:64px;height:64px;overflow:hidden;}
+.ribbon-corner::before{content:'';position:absolute;top:0;left:0;width:80px;height:24px;background:var(--primary);transform:rotate(-45deg) translate(-18px,-8px);transform-origin:left top;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding-left:28px;line-height:24px;}
+.ribbon-corner::after{content:'JAYINCO';position:absolute;top:5px;left:3px;color:#fff;font-size:9px;font-weight:800;letter-spacing:.03em;z-index:1;}
+
+.detail-info{flex:1;min-width:0;}
+.detail-info h1{font-size:26px;font-weight:900;color:var(--text);line-height:1.35;margin-bottom:18px;}
+
+.info-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin-bottom:18px;}
+.info-label{font-size:14px;font-weight:700;color:var(--muted);}
+.info-value{font-size:14px;color:var(--text);font-weight:500;}
+
+.detail-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px;padding:16px 18px;background:var(--bg2);border-radius:var(--radius);border-left:3px solid var(--primary);}
+
+.notice-box{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:22px;padding:12px 16px;background:#fffbf0;border:1px solid #f0e6c8;border-radius:4px;display:flex;gap:8px;align-items:flex-start;}
+.notice-icon{color:#e6a800;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.action-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.btn-action{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:4px;font-size:14px;font-weight:700;text-decoration:none;transition:.2s;cursor:pointer;border:none;font-family:inherit;}
+.btn-red{background:var(--primary);color:#fff;}
+.btn-red:hover{background:var(--primary-d);}
+.btn-blue{background:#1a56db;color:#fff;}
+.btn-blue:hover{background:#1347b8;}
+.btn-green{background:#00a86b;color:#fff;}
+.btn-green:hover{background:#008c59;}
+.btn-gray{background:#555;color:#fff;}
+.btn-gray:hover{background:#333;}
+.btn-action svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ═══ RED LABEL SECTIONS (dg-switch style) ═══ */
+.detail-sections{padding:40px 0 60px;}
+.red-label{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:10px 24px;font-size:15px;font-weight:800;border-radius:4px 4px 0 0;position:relative;}
+.red-label svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;}
+.red-label::after{content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid var(--primary);}
+.stripe-bg{background:repeating-linear-gradient(-45deg,#fafafa,#fafafa 10px,#f5f3f1 10px,#f5f3f1 20px);border:1.5px solid var(--line);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:28px 32px;min-height:80px;}
+
+/* 基本说明 - 纯富文本（后台上传文字/图片，无Tab） */
+
+/* Rich content area (for text/images uploaded from backend) */
+.rich-content{font-size:14px;color:var(--text);line-height:1.85;}
+.rich-content p{margin-bottom:12px;}
+.rich-content img{max-width:100%;height:auto;border-radius:4px;margin:12px 0;border:1px solid var(--line);}
+
+/* Molde Code Table */
+.molde-code-table{width:100%;border-collapse:collapse;background:#fff;border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.molde-code-table th{background:var(--bg2);font-size:13px;font-weight:800;color:var(--text);text-align:left;padding:12px 16px;border-bottom:1.5px solid var(--line);white-space:nowrap;}
+.molde-code-table td{font-size:13px;color:var(--text);padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:middle;line-height:1.6;}
+.molde-code-table tr:last-child td,.molde-code-table tr:last-child th{border-bottom:none;}
+.molde-code-table tr:hover td{background:rgba(226,35,26,.02);}
+.molde-no{width:48px;text-align:center;font-weight:800;color:var(--muted);}
+.btn-mini{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:3px;font-size:12px;font-weight:700;text-decoration:none;transition:.15s;border:none;cursor:pointer;font-family:inherit;}
+.btn-pdf{background:var(--primary);color:#fff;}
+.btn-pdf:hover{background:var(--primary-d);}
+.btn-3d{background:#00a86b;color:#fff;}
+.btn-3d:hover{background:#008c59;}
+.btn-mini svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* 尺寸图 & 产品说明 placeholder */
+.dimension-area,.desc-area{min-height:120px;display:flex;align-items:flex-start;justify-content:center;gap:20px;flex-wrap:wrap;}
+.dimension-placeholder,.desc-placeholder{width:100%;max-width:600px;aspect-ratio:16/9;background:var(--bg2);border:2px dashed #ccc;border-radius:4px;display:grid;place-items:center;color:#999;font-size:14px;}
+.dimension-placeholder svg,.desc-placeholder svg{width:48px;height:48px;stroke:#bbb;fill:none;stroke-width:1.5;margin-bottom:8px;}
+
+/* ═══ RELATED PRODUCTS ═══ */
+.related-section{padding:0 0 60px;}
+.related-section h2{font-size:20px;font-weight:900;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.related-section h2::before{content:'';display:block;width:4px;height:22px;background:var(--primary);border-radius:2px;}
+.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.related-card{border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.2s;text-decoration:none;color:inherit;}
+.related-card:hover{box-shadow:var(--shadow);border-color:var(--primary);}
+.related-card-img{aspect-ratio:4/3;background:var(--bg2);display:grid;place-items:center;padding:16px;}
+.related-card-img svg{width:70%;stroke:var(--primary);fill:none;stroke-width:1.2;opacity:.35;}
+.related-card-body{padding:14px 16px;}
+.related-card-body h4{font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:4px;}
+.related-card-body p{font-size:12px;color:var(--muted);}
+
+/* ═══ FOOTER ═══ */
+footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:40px;}
+.foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;}
+footer h4{font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em;}
+footer a{color:#9aa0a8;text-decoration:none;font-size:13.5px;line-height:2.2;display:block;transition:.15s;}
+footer a:hover{color:var(--primary);}
+footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
+.foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-logo img{height:32px;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 0;display:flex;justify-content:space-between;font-size:12.5px;opacity:.45;}
+
+@media(max-width:900px){
+  .detail-main{flex-direction:column;}
+  .detail-img-box{width:100%;max-width:420px;margin:0 auto;}
+  .related-grid{grid-template-columns:repeat(2,1fr);}
+  .foot-main{grid-template-columns:1fr 1fr;gap:26px;}
+  .nav-links{display:none;}
+  .spec-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+}
+@media(max-width:480px){
+  .related-grid{grid-template-columns:1fr;}
+  .action-btns{flex-direction:column;}
+  .btn-action{justify-content:center;}
+  .info-grid{grid-template-columns:1fr;gap:4px;}
+  .foot-main{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<input type="checkbox" id="langToggle" hidden>
+
+<!-- ═══ NAV ═══ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="logo.png" alt="JAYINCO Logo"><div class="logo-text"><div class="lt">佳盈盛电子</div><div class="ls">JAYINCO</div></div></a>
+    <div style="display:flex;align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a></li>
+        <li><a href="products.html" class="active"><span class="zh">产品中心</span><span class="en">Products</span></a></li>
+        <li><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a></li>
+        <li><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a></li>
+        <li><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a></li>
+      </ul>
+      <div class="lang-toggle"><label for="langToggle" id="langZh">中文</label><label for="langToggle" id="langEn">EN</label></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ BREADCRUMB ═══ -->
+<div class="wrap" id="staticBreadcrumb">
+  <div class="breadcrumb">
+    <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a>
+    <span class="sep">&rsaquo;</span>
+    <a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a>
+    <span class="sep">&rsaquo;</span>
+    <span class="zh">线对板连接器 XH2.54-2P 卧式</span>
+    <span class="en block">WTB Connector XH2.54-2P Horizontal</span>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT DETAIL HERO ═══ -->
+<section class="detail-hero" id="staticDetail">
+  <div class="wrap">
+    <div class="detail-main">
+
+      <!-- Left: Product Image -->
+      <div class="detail-img-box">
+        <div class="ribbon-corner"></div>
+        <svg class="placeholder-svg" viewBox="0 0 240 200">
+          <rect x="40" y="40" width="70" height="50" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+          <rect x="52" y="55" width="14" height="16" rx="2" fill="currentColor" opacity=".2"/>
+          <rect x="74" y="55" width="14" height="16" rx="2" fill="currentColor" opacity=".2"/>
+          <path d="M110 65h38" stroke="currentColor" stroke-width="2.5"/>
+          <rect x="148" y="40" width="52" height="50" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+          <circle cx="166" cy="57" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+          <circle cx="184" cy="57" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+          <!-- PCB lines hint -->
+          <line x1="30" y1="95" x2="210" y2="95" stroke="currentColor" stroke-width="1" opacity=".15"/>
+          <line x1="60" y1="90" x2="60" y2="105" stroke="currentColor" stroke-width="1" opacity=".15"/>
+          <line x1="174" y1="90" x2="174" y2="105" stroke="currentColor" stroke-width="1" opacity=".15"/>
+        </svg>
+      </div>
+
+      <!-- Right: Product Info -->
+      <div class="detail-info">
+        <h1>线对板连接器 XH2.54-2P 卧式<br><span style="font-size:17px;font-weight:600;color:var(--muted);" class="en block">WTB Connector XH2.54-2P Horizontal Type</span></h1>
+
+        <div class="info-grid">
+          <span class="info-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+          <span class="info-value">2.54mm Pitch / 2Pin / PA66 / UL94 V-0</span>
+
+          <span class="info-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+          <span class="info-value">JY-XH2.54-2P-WT</span>
+
+          <span class="info-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+          <span class="info-value">3000<span class="zh">个/盘</span><span class="en block">pcs/reel</span></span>
+        </div>
+
+        <p class="detail-desc">
+          <span class="zh">XH系列线对板连接器，2.54mm标准间距，卧式贴片型(SMT)，适用于家电控制板、LED驱动电源、智能照明、小家电等应用场景。采用PA66耐高温材料，符合UL94 V-0阻燃等级。工作温度范围 -40°C ~ +105°C，额定电流3A/Pin，接触电阻 ≤20mΩ。兼容JST XH系列，可完全替代。</span>
+          <span class="en block">XH series wire-to-board connector with standard 2.54mm pitch, horizontal SMT mounting type. Suitable for appliance control boards, LED drivers, smart lighting and small home appliances. Made from high-temp PA66 material, rated UL94 V-0 flame retardant. Operating temperature -40°C ~ +105°C, rated current 3A/pin, contact resistance ≤20mΩ. JST XH series compatible, fully replaceable.</span>
+        </p>
+
+        <div class="notice-box">
+          <span class="notice-icon">&#9888;</span>
+          <span><span class="zh">声明：有关产品的规格、参数、寿命、工作温度、手感、防水等级等数据，只代表佳盈盛电子内部的测试结果，如需详细测试方式，请联系业务人员。</span><span class="en block">Disclaimer: Specifications, parameters, lifespan, operating temperature, tactile feel, waterproof rating and other data represent internal test results of JAYINCO Electronics. For detailed testing methods, please contact our sales team.</span></span>
+        </div>
+
+        <div class="action-btns">
+          <a class="btn-action btn-red" href="contact.html">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            <span class="zh">在线咨询</span><span class="en">Online Inquiry</span>
+          </a>
+          <a class="btn-action btn-blue" href="mailto:support@jayinco.com?subject=Technical Support Request">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span class="zh">技术支持</span><span class="en">Tech Support</span>
+          </a>
+          <a class="btn-action btn-green" href="#">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            <span class="zh">PDF文件下载</span><span class="en">PDF Download</span>
+          </a>
+          <a class="btn-action btn-gray" href="#">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span class="zh">3D下载</span><span class="en">3D Download</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RED LABEL SECTIONS (dg-switch style) ═══ -->
+<section class="detail-sections" id="staticSections">
+  <div class="wrap">
+
+    <!-- ═══ 1. 基本说明 ═══ -->
+    <div class="red-label">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="zh">基本说明</span><span class="en">Basic Information</span>
+    </div>
+    <div class="stripe-bg">
+
+      <!-- Rich text area: 后台可编辑上传文字/图片（无Tab，直接展示） -->
+      <div class="rich-content">
+        <!-- 示例内容：后台通过编辑器上传文字或图片后替换此处 -->
+        <p><span class="zh">XH系列线对板连接器是佳盈盛电子的主力产品线之一，采用2.54mm标准间距设计，兼容JST XH全系列产品。该系列具有接触可靠、插拔力稳定、耐高温等特点，广泛应用于家电控制板、LED驱动电源、智能照明、小家电、安防设备等领域。</span><span class="en block">The XH series wire-to-board connector is one of JAYINCO's flagship product lines, featuring a standard 2.54mm pitch design, fully compatible with JST XH series. This series offers reliable contact, stable insertion/extraction force, and high temperature resistance. Widely used in appliance control boards, LED drivers, smart lighting, small home appliances, security equipment and more.</span></p>
+
+        <p><strong>主要特点 / Key Features:</strong></p>
+        <ul style="padding-left:20px;margin-bottom:12px;">
+          <li><span class="zh">标准2.54mm间距，通用性强</span><span class="en block">Standard 2.54mm pitch, high versatility</span></li>
+          <li><span class="zh">PA66耐高温材料，UL94 V-0阻燃</span><span class="en block">High-temp PA66 material, UL94 V-0 flame retardant</span></li>
+          <li><span class="zh">额定电流3A/Pin，接触电阻≤20mΩ</span><span class="en block">Rated current 3A/pin, contact resistance ≤20mΩ</span></li>
+          <li><span class="zh">工作温度 -40°C ~ +105°C</span><span class="en block">Operating temp -40°C ~ +105°C</span></li>
+          <li><span class="zh">SMT贴片工艺，适合自动化生产</span><span class="en block">SMT process suitable for automated production</span></li>
+        </ul>
+
+        <!-- 后台可上传的图片（产品图/参数图/应用场景图等） -->
+        <img src="" alt="<span class='zh'>后台上传图片</span><span class='en'>Upload from backend</span>" onerror="this.style.display='none'" style="max-width:100%;border-radius:4px;border:1px solid var(--line);margin-top:10px;"/>
+      </div>
+    </div><!-- /.stripe-bg -->
+
+    <!-- spacer -->
+    <div style="height:32px;"></div>
+
+    <!-- ═══ 2. Molde Code (可选) ═══ -->
+    <div class="red-label">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Molde Code
+    </div>
+    <div class="stripe-bg">
+      <table class="molde-code-table">
+        <thead>
+          <tr>
+            <th>NO.</th>
+            <th>Molde Code</th>
+            <th>Specifications</th>
+            <th>PDF</th>
+            <th>3D下载</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="molde-no">1</td>
+            <td>JY-XH254-WT-02PA</td>
+            <td><span class="zh">XH2.54 卧式公座 2Pin，贴片型(SMT)，PA66 黑色</span><span class="en block">XH2.54 Horizontal male housing 2Pin, SMT type, PA66 black</span></td>
+            <td><a href="#" class="btn-mini btn-pdf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>PDF</a></td>
+            <td><a href="#" class="btn-mini btn-3d"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</a></td>
+          </tr>
+          <tr>
+            <td class="molde-no">2</td>
+            <td>JY-XH254-VT-02PF</td>
+            <td><span class="zh">XH2.54 立式母座 2Pin，贴片型(SMT)，带定位柱</span><span class="en block">XH2.54 Vertical female receptacle 2Pin, SMT, with polarizer post</span></td>
+            <td><a href="#" class="btn-mini btn-pdf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>PDF</a></td>
+            <td><a href="#" class="btn-mini btn-3d"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</a></td>
+          </tr>
+          <tr>
+            <td class="molde-no">3</td>
+            <td>JY-XH254-WT-03PA</td>
+            <td><span class="zh">XH2.54 卧式公座 3Pin，贴片型(SMT)，PA66 黑色</span><span class="en block">XH2.54 Horizontal male housing 3Pin, SMT type, PA66 black</span></td>
+            <td><a href="#" class="btn-mini btn-pdf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>PDF</a></td>
+            <td><a href="#" class="btn-mini btn-3d"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</a></td>
+          </tr>
+          <tr>
+            <td class="molde-no">4</td>
+            <td>JY-XH254-VT-03PF</td>
+            <td><span class="zh">XH2.54 立式母座 3Pin，贴片型(SMT)，带定位柱</span><span class="en block">XH2.54 Vertical female receptacle 3Pin, SMT, with polarizer post</span></td>
+            <td><a href="#" class="btn-mini btn-pdf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>PDF</a></td>
+            <td><a href="#" class="btn-mini btn-3d"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- /.stripe-bg -->
+
+    <div style="height:32px;"></div>
+
+    <!-- ═══ 3. 尺寸图 ═══ -->
+    <div class="red-label">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+      <span class="zh">尺寸图</span><span class="en">Dimension Drawing</span>
+    </div>
+    <div class="stripe-bg">
+      <div class="dimension-area">
+        <!-- 后台可上传尺寸工程图 -->
+        <div class="dimension-placeholder">
+          <svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="28" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="14" y1="14" x2="14" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="14" x2="20" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="26" y1="14" x2="26" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="32" y1="14" x2="32" y2="30" stroke="currentColor" stroke-width="1.5"/><path d="M10 38h28M12 42h24" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>
+          <span class="zh">尺寸图区域<br><small style="color:#bbb;font-size:12px;">（后台上传工程图纸 / CAD截图）</small></span>
+          <span class="en block">Dimension Drawing Area<br><small style="color:#bbb;font-size:12px;">(Upload engineering drawing from backend)</small></span>
+        </div>
+      </div>
+    </div><!-- /.stripe-bg -->
+
+    <div style="height:32px;"></div>
+
+    <!-- ═══ 4. 产品说明 ═══ -->
+    <div class="red-label">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="zh">产品说明</span><span class="en">Product Description</span>
+    </div>
+    <div class="stripe-bg">
+      <div class="rich-content desc-area">
+        <!-- 后台可编辑的富文本内容（文字/图片） -->
+        <p><span class="zh">本产品为JAYINCO佳盈盛电子自主研发生产的XH系列线对板连接器。采用高品质磷青铜接触件配合锡铅镀层，确保长期稳定的电气连接性能。绝缘体选用PA66尼龙加玻纤材料，具备优异的机械强度和耐热性能。</span><span class="en block">This product is a self-developed XH series wire-to-board connector by JAYINCO Electronics. It uses high-quality phosphor bronze contacts with tin-lead plating to ensure long-term stable electrical connection performance. The insulator is made of PA66 nylon with glass fiber, offering excellent mechanical strength and heat resistance.</span></p>
+
+        <p><strong><span class="zh">应用领域 / Applications:</span></span></p>
+        <ul style="padding-left:20px;margin-bottom:12px;">
+          <li><span class="zh">家用电器：空调、冰箱、洗衣机、微波炉控制板</span><span class="en block">Home appliances: AC, refrigerator, washing machine, microwave control boards</span></li>
+          <li><span class="zh">LED照明：驱动电源、调光器、智能照明控制器</span><span class="en block">LED lighting: drivers, dimmers, smart lighting controllers</span></li>
+          <li><span class="zh">工业设备：PLC、变频器、传感器接口</span><span class="en block">Industrial equipment: PLC, inverters, sensor interfaces</span></li>
+          <li><span class="zh">消费电子：音响、路由器、机顶盒内部连接</span><span class="en block">Consumer electronics: audio, routers, set-top box internal connections</span></li>
+        </ul>
+
+        <p style="color:var(--muted);font-size:13px;"><em><span class="zh">* 以上信息仅供参考，具体参数以实际产品规格书为准。如需定制或特殊要求，请联系我们的销售团队。</span><span class="en block">* The above information is for reference only. Please refer to the actual product datasheet for specific parameters. For customization or special requirements, please contact our sales team.</span></em></p>
+      </div>
+    </div><!-- /.stripe-bg -->
+
+  </div>
+</section>
+
+<!-- ═══ RELATED PRODUCTS ═══ -->
+<section class="related-section" id="staticRelated">
+  <div class="wrap">
+    <h2><span class="zh">相关产品推荐</span><span class="en">Related Products</span></h2>
+    <div class="related-grid">
+      <a href="product-detail.html?id=JY-WTB-002" class="related-card">
+        <div class="related-card-img"><svg viewBox="0 0 120 90"><rect x="25" y="20" width="35" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="33" y="28" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><rect x="45" y="28" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><path d="M60 32h18" stroke="currentColor" stroke-width="2"/><rect x="78" y="20" width="25" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="87" cy="31" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="96" cy="31" r="3.5" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <div class="related-card-body">
+          <h4>XH2.54-3P 卧式</h4>
+          <p>JY-XH2.54-3P-WT</p>
+        </div>
+      </a>
+      <a href="product-detail.html?id=JY-WTB-003" class="related-card">
+        <div class="related-card-img"><svg viewBox="0 0 120 90"><rect x="25" y="20" width="35" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="33" y="28" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><rect x="45" y="28" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><rect x="53" y="28" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><path d="M60 32h18" stroke="currentColor" stroke-width="2"/><rect x="78" y="20" width="25" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="87" cy="31" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="94" cy="31" r="3.5" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <div class="related-card-body">
+          <h4>XH2.54-4P 卧式</h4>
+          <p>JY-XH2.54-4P-WT</p>
+        </div>
+      </a>
+      <a href="product-detail.html?id=JY-WTB-004" class="related-card">
+        <div class="related-card-img"><svg viewBox="0 0 120 90"><rect x="25" y="28" width="35" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="33" y="36" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><rect x="45" y="36" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><path d="M60 41h18" stroke="currentColor" stroke-width="2"/><rect x="78" y="28" width="25" height="25" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="87" cy="39" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="96" cy="39" r="3.5" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <div class="related-card-body">
+          <h4>XH2.54-2P 立式</h4>
+          <p>JY-XH2.54-2P-VT</p>
+        </div>
+      </a>
+      <a href="product-detail.html?id=JY-BTB-001" class="related-card">
+        <div class="related-card-img"><svg viewBox="0 0 120 90"><rect x="18" y="32" width="28" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="72" y="32" width="28" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M46 40h28M60 35l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+        <div class="related-card-body">
+          <h4>板对板 0.8mm 40Pin</h4>
+          <p>JY-BTB-080-40-H3.0</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DYNAMIC DETAIL (CMS) ═══ -->
+<div id="cmsDetail"></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="JAYINCO"></div>
+      <p><span class="zh">专业连接器制造商，致力为全球客户提供高可靠的互连解决方案。</span><span class="en block">Professional connector manufacturer delivering reliable interconnection solutions worldwide.</span></p>
+    </div>
+    <div>
+      <h4><span class="zh">快速链接</span><span class="en">Quick Links</span></h4>
+      <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">主要产品</span><span class="en">Products</span></h4>
+      <a href="products.html"><span class="zh">线对板连接器</span><span class="en">Wire-to-Board</span></a><a href="products.html"><span class="zh">板对板连接器</span><span class="en">Board-to-Board</span></a><a href="products.html"><span class="zh">USB连接器</span><span class="en">USB Connectors</span></a><a href="products.html"><span class="zh">FPC/FFC连接器</span><span class="en">FPC/FFC</span></a><a href="products.html"><span class="zh">汽车连接器</span><span class="en">Automotive</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
+      <p style="font-weight:700;color:#e0e0e0;">JAYINCO (佳盈盛电子)</p>
+      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan<br>Guangdong, China</span></p>
+      <p>sales@jayinco.com</p>
+      <p>+86 769 XXXX XXXX</p>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>&copy; 2026 JAYINCO 佳盈盛电子. <span class="zh">版权所有。</span><span class="en">All rights reserved.</span></span>
+    <span>China &middot; 中国</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script src="cms.js"></script>
+</body>
+</html>
