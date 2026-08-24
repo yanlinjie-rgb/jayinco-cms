@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAYINCO 后台管理 | Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E2231A;--primary-d:#B71C1C;--bg:#f5f6f8;--card:#fff;--text:#1a1a1a;--muted:#666;--line:#e3e5e9;--radius:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+a{color:var(--primary);text-decoration:none;}
+/* login */
+.login-wrap{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#1a1a1a,#2c2c2c);padding:20px;}
+.login-card{background:#fff;border-radius:14px;padding:40px 36px;width:380px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.login-card .brand{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.login-card .brand .logo{width:46px;height:46px;background:var(--primary);border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:20px;}
+.login-card h1{font-size:20px;font-weight:900;}
+.login-card .sub{font-size:12px;color:var(--muted);}
+.login-card input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;margin-top:8px;font-family:inherit;}
+.login-card label{font-size:13px;font-weight:600;margin-top:14px;display:block;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:14px;border:2px solid var(--primary);background:var(--primary);color:#fff;cursor:pointer;transition:.15s;font-family:inherit;}
+.btn:hover{background:var(--primary-d);border-color:var(--primary-d);}
+.btn.block{width:100%;margin-top:22px;}
+.btn-ghost{background:transparent;color:var(--primary);}
+.btn-ghost:hover{background:var(--primary);color:#fff;}
+.btn-sm{padding:7px 14px;font-size:13px;}
+.btn-danger{border-color:#c62828;background:#c62828;}
+.btn-danger:hover{background:#a51f1f;border-color:#a51f1f;}
+.btn-gray{background:#eee;border-color:#ddd;color:#444;}
+.btn-gray:hover{background:#e0e0e0;}
+.err{color:#c62828;font-size:13px;margin-top:12px;min-height:18px;}
+/* layout */
+.topbar{background:#111618;color:#fff;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar .l{display:flex;align-items:center;gap:12px;font-weight:800;}
+.topbar .l .logo{width:32px;height:32px;background:var(--primary);border-radius:7px;display:grid;place-items:center;font-weight:900;}
+.topbar .r{display:flex;align-items:center;gap:16px;font-size:13px;}
+.topbar .r .u{opacity:.8;}
+.container{display:flex;min-height:calc(100vh - 60px);}
+.sidebar{width:210px;background:#fff;border-right:1px solid var(--line);padding:18px 12px;flex-shrink:0;}
+.sidebar button{display:block;width:100%;text-align:left;padding:12px 14px;border:none;background:none;border-radius:8px;font:600 14px/1 inherit;color:var(--text);cursor:pointer;margin-bottom:4px;transition:.15s;}
+.sidebar button:hover{background:var(--bg);}
+.sidebar button.active{background:var(--primary);color:#fff;}
+.main{flex:1;padding:28px 32px;overflow:auto;}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.panel-head h2{font-size:22px;font-weight:900;}
+/* table */
+.tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.tbl th{background:#fafafa;font-size:12px;font-weight:800;color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.04em;}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#fafbfc;}
+.thumb{width:46px;height:46px;object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#fff;}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(226,35,26,.1);color:var(--primary);}
+.tag.off{background:#eee;color:#888;}
+.empty{text-align:center;color:var(--muted);padding:40px;font-size:14px;}
+/* form modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:100;overflow:auto;padding:30px 16px;}
+.modal-bg.show{display:block;}
+.modal{background:#fff;border-radius:12px;max-width:760px;margin:0 auto;padding:28px 30px 30px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal h3{font-size:18px;font-weight:900;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;}
+.modal .close{cursor:pointer;font-size:22px;color:var(--muted);background:none;border:none;line-height:1;}
+.field{margin-bottom:15px;}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+.field .hint{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:7px;font-size:13.5px;font-family:inherit;background:#fff;}
+.field textarea{resize:vertical;min-height:80px;}
+.field.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.two-lang{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:14px;background:#fcfcfd;}
+.two-lang .lab{font-size:12px;font-weight:700;color:var(--primary);margin-bottom:8px;}
+.two-lang .inner{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.two-lang .inner label{font-size:11px;color:var(--muted);font-weight:600;display:block;margin-bottom:4px;}
+.img-row{display:flex;align-items:center;gap:12px;}
+.img-row img{width:70px;height:70px;object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#fff;}
+.img-row .url{font-size:12px;color:var(--muted);word-break:break-all;flex:1;}
+.mc-table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+.mc-table th{font-size:11px;font-weight:700;color:var(--muted);padding:6px;text-align:left;}
+.mc-table td{padding:4px;}
+.mc-table input{width:100%;padding:7px 8px;font-size:12.5px;border:1.5px solid var(--line);border-radius:6px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;border-top:1px solid var(--line);padding-top:18px;}
+.config-warn{background:#fff8e1;border:1px solid #ffe082;color:#8a6d00;padding:14px 18px;border-radius:8px;margin-bottom:20px;font-size:13.5px;}
+.loading{text-align:center;color:var(--muted);padding:30px;font-size:14px;}
+@media(max-width:820px){.sidebar{width:100%;display:flex;flex-wrap:wrap;gap:6px;}.container{flex-direction:column;}.sidebar button{width:auto;}.field.row2,.field.row3,.two-lang .inner{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="brand">
+      <div class="logo">J</div>
+      <div><div style="font-weight:900;font-size:18px;">JAYINCO 后台</div><div class="sub">佳盈盛电子 · 内容管理系统</div></div>
+    </div>
+    <div id="configWarn" class="config-warn" style="display:none;">
+      ⚠️ 尚未配置 Supabase。请编辑 <b>cms-config.js</b> 填入 SUPABASE_URL 与 SUPABASE_ANON_KEY，并在 Supabase 执行 <b>supabase-schema.sql</b>。
+    </div>
+    <label>邮箱 Email</label>
+    <input type="email" id="email" placeholder="admin@jayinco.com" autocomplete="username">
+    <label>密码 Password</label>
+    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="btn block" id="loginBtn">登录后台</button>
+    <div class="err" id="loginErr"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">首次使用：在 Supabase 控制台 Auth → Users 创建管理员账号</p>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="appView" style="display:none;">
+  <div class="topbar">
+    <div class="l"><div class="logo">J</div><span>JAYINCO 后台管理</span></div>
+    <div class="r">
+      <span class="u" id="userEmail"></span>
+      <button class="btn btn-gray btn-sm" id="logoutBtn">退出登录</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <button class="active" data-tab="products">📦 产品管理</button>
+      <button data-tab="pages">🎨 页面装修</button>
+      <button data-tab="articles">📰 文章管理</button>
+    </div>
+    <div class="main">
+      <div id="tab-products">
+        <div class="panel-head">
+          <h2>产品管理</h2>
+          <button class="btn btn-sm" id="addProductBtn">+ 新增产品</button>
+        </div>
+        <div id="productList"><div class="loading">加载中…</div></div>
+      </div>
+
+      <div id="tab-pages" style="display:none;">
+        <div class="panel-head">
+          <h2>页面装修</h2>
+          <button class="btn btn-sm" id="addKeyBtn">+ 新增内容键</button>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">编辑前台页面文案与图片。文本键会替换对应位置的文字，图片键会替换横幅/配图。带 <code>data-cms</code> 标记的页面元素才会被替换。</p>
+        <div id="contentList"><div class="loading">加载中…</div></div>
+      </div>
+
+      <div id="tab-articles" style="display:none;">
+        <div class="panel-head">
+          <h2>文章管理</h2>
+          <button class="btn btn-sm" id="addArticleBtn">+ 新增文章</button>
+        </div>
+        <div id="articleList"><div class="loading">加载中…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL (产品/文章/内容表单共用) ═══ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script>
+/* ════════ 初始化 ════════ */
+const C = window.CMS;
+const sb = C.sb;
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+if(!C.configured){
+  document.getElementById('configWarn').style.display='block';
+  document.getElementById('email').disabled=true;
+  document.getElementById('password').disabled=true;
+  document.getElementById('loginBtn').disabled=true;
+}
+
+/* ════════ 登录 / 会话 ════════ */
+async function checkSession(){
+  if(!C || !C.configured || !sb){ console.warn('[Admin] 未配置或 sb 为空'); return; }
+  try {
+    const {data,error} = await sb.auth.getSession();
+    if(error) { console.warn('[Admin] getSession error:', error.message); showLogin(); return; }
+    if(data.session){ showApp(data.session.user); }
+    else { showLogin(); }
+  } catch(e){ console.error('[Admin] getSession crash:', e); showLogin(); }
+}
+function showLogin(){ $('#loginView').style.display='grid'; $('#appView').style.display='none'; }
+function showApp(user){
+  $('#loginView').style.display='none'; $('#appView').style.display='block';
+  $('#userEmail').textContent = user.email || '';
+  loadProducts();
+}
+$('#loginBtn').addEventListener('click', async function(){
+  const email=$('#email').value.trim(), pwd=$('#password').value;
+  $('#loginErr').textContent='';
+  if(!email){ $('#loginErr').textContent='请输入邮箱'; return; }
+  if(!pwd){ $('#loginErr').textContent='请输入密码'; return; }
+  if(!sb){ $('#loginErr').textContent='错误：Supabase 客户端未初始化，请检查 cms-config.js'; return; }
+  try {
+    const {data,error} = await sb.auth.signInWithPassword({email,password:pwd});
+    if(error){ $('#loginErr').textContent='登录失败：'+error.message; return; }
+    // 成功时 onAuthStateChange 会自动触发 showApp
+  } catch(e){ $('#loginErr').textContent='异常：'+e.message; console.error('[Admin] login crash:', e); }
+});
+$('#logoutBtn').addEventListener('click', async ()=>{ 
+  try{ await sb.auth.signOut(); }catch(e){console.error(e);} 
+  showLogin(); 
+});
+if(sb && sb.auth){ 
+  sb.auth.onAuthStateChange((_e,s)=>{ 
+    if(s.session) showApp(s.session.user); else showLogin(); 
+  }); 
+  checkSession(); 
+} else { 
+  console.warn('[Admin] sb.auth 不存在，跳过会话检查'); 
+  showLogin(); 
+}
+
+/* ════════ 侧边切换 ════════ */
+$$('.sidebar button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    $$('.sidebar button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const t=b.dataset.tab;
+    ['products','pages','articles'].forEach(x=>{
+      $('#tab-'+x).style.display = (x===t)?'block':'none';
+    });
+    if(t==='pages' && !window._pagesLoaded) loadContent();
+    if(t==='articles' && !window._articlesLoaded) loadArticles();
+  });
+});
+
+/* ════════ 通用：图片上传 ════════ */
+async function uploadImage(file, folder){
+  if(!file) return null;
+  const ext = (file.name.split('.').pop()||'png').toLowerCase();
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const {error} = await sb.storage.from(C.bucket).upload(path, file, {upsert:true});
+  if(error){ alert('上传失败：'+error.message); return null; }
+  const {data} = sb.storage.from(C.bucket).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+/* ════════ 产品管理 ════════ */
+const CATS = [
+  ['wire-to-board','线对板连接器','Wire-to-Board'],
+  ['board-to-board','板对板连接器','Board-to-Board'],
+  ['wire-to-wire','线对线连接器','Wire-to-Wire'],
+  ['usb','USB 连接器','USB Connectors'],
+  ['ffc-fpc','FFC/FPC 连接器','FFC/FPC'],
+  ['dc-jack','DC 电源插座','DC Jack'],
+  ['card-holder','卡座系列','Card Holders'],
+  ['rf-coaxial','RF 射频同轴','RF Coaxial'],
+  ['battery-holder','电池座','Battery Holder'],
+  ['hdmi','HDMI 连接器','HDMI'],
+  ['earphone-jack','耳机插座','Earphone Jack'],
+  ['ac-dc-power','AC/DC 电源连接器','AC/DC Power'],
+  ['circular','圆形连接器','Circular'],
+  ['terminal-block','端子台','Terminal Block'],
+  ['automotive','汽车连接器','Automotive'],
+  ['io-connector','I/O 连接器','I/O Connector'],
+  ['antenna','天线连接器','Antenna'],
+  ['pcb-socket','PCB 插座','PCB Socket'],
+  ['industrial','工业连接器','Industrial'],
+  ['fiber','光纤连接器','Fiber Optic']
+];
+const catLabel = c => (CATS.find(x=>x[0]===c)||[,'未知',c])[1];
+
+async function loadProducts(){
+  const {data,error} = await sb.from('products').select('*').order('sort_order').order('created_at');
+  if(error){ $('#productList').innerHTML='<div class="err">读取失败：'+error.message+'</div>'; return; }
+  if(!data.length){ $('#productList').innerHTML='<div class="empty">暂无产品，点击右上角"新增产品"。</div>'; return; }
+  let html='<table class="tbl"><thead><tr><th>图片</th><th>名称(中/英)</th><th>分类</th><th>型号</th><th>排序</th><th>操作</th></tr></thead><tbody>';
+  data.forEach(p=>{
+    html+=`<tr>
+      <td><img class="thumb" src="${p.image_url||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'"></td>
+      <td><b>${esc(p.name_zh)}</b><br><span style="color:var(--muted);font-size:12px">${esc(p.name_en)}</span></td>
+      <td><span class="tag">${esc(catLabel(p.category))}</span></td>
+      <td>${esc(p.model||'-')}</td>
+      <td>${p.sort_order||0}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openProduct('${p.id}')">编辑</button> <button class="btn btn-danger btn-sm" onclick="delProduct('${p.id}')">删除</button></td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  $('#productList').innerHTML=html;
+}
+
+function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function openProduct(id){
+  sb.from('products').select('*').eq('id',id).single().then(({data})=>editProduct(data));
+}
+function addProduct(){ editProduct(null); }
+
+function editProduct(p){
+  p = p || {category:'wire-to-board',name_zh:'',name_en:'',spec:'',model:'',packaging:'',description_zh:'',description_en:'',image_url:'',pdf_url:'',basic_info_zh:'',basic_info_en:'',molde_code:[],dimensions_img:'',product_desc_zh:'',product_desc_en:'',related:[],sort_order:0};
+  const mc = (Array.isArray(p.molde_code)?p.molde_code:[]);
+  let mcRows = mc.map((r,i)=>moldeRow(i,r)).join('');
+  const catOpts = CATS.map(c=>`<option value="${c[0]}" ${c[0]===p.category?'selected':''}>${c[1]} / ${c[2]}</option>`).join('');
+  const box = $('#modalBox');
+  box.innerHTML = `
+    <h3>产品编辑 <button class="close" onclick="closeModal()">&times;</button></h3>
+    <div class="field"><label>分类 Category</label><select id="f_cat">${catOpts}</select></div>
+    <div class="two-lang">
+      <div class="lab">名称 Name</div>
+      <div class="inner">
+        <div><label>中文</label><input id="f_name_zh" value="${esc(p.name_zh)}"></div>
+        <div><label>English</label><input id="f_name_en" value="${esc(p.name_en)}"></div>
+      </div>
+    </div>
+    <div class="field row3">
+      <div><label>规格 Spec</label><input id="f_spec" value="${esc(p.spec)}"></div>
+      <div><label>型号 Model</label><input id="f_model" value="${esc(p.model)}"></div>
+      <div><label>包装 Packaging</label><input id="f_pack" value="${esc(p.packaging)}"></div>
+    </div>
+    <div class="two-lang">
+      <div class="lab">简短描述 Description</div>
+      <div class="inner">
+        <div><label>中文</label><textarea id="f_desc_zh">${esc(p.description_zh)}</textarea></div>
+        <div><label>English</label><textarea id="f_desc_en">${esc(p.description_en)}</textarea></div>
+      </div>
+    </div>
+    <div class="field"><label>产品主图 Product Image</label>
+      <div class="img-row"><img id="f_img_prev" src="${p.image_url||''}" onerror="this.style.display='none'">
+        <input id="f_img" value="${esc(p.image_url)}" placeholder="图片 URL（可上传）" style="flex:1">
+        <input type="file" id="f_img_file" accept="image/*" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('f_img_file','f_img','f_img_prev','products')">上传</button></div>
+    </div>
+    <div class="field"><label>PDF 资料 PDF URL</label>
+      <div class="img-row"><input id="f_pdf" value="${esc(p.pdf_url)}" style="flex:1">
+        <input type="file" id="f_pdf_file" accept="application/pdf" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('f_pdf_file','f_pdf',null,'products')">上传</button></div>
+    </div>
+    <div class="two-lang">
+      <div class="lab">基本说明 Basic Info（支持 HTML）</div>
+      <div class="inner">
+        <div><label>中文</label><textarea id="f_bi_zh" style="min-height:120px">${esc(p.basic_info_zh)}</textarea></div>
+        <div><label>English</label><textarea id="f_bi_en" style="min-height:120px">${esc(p.basic_info_en)}</textarea></div>
+      </div>
+    </div>
+    <div class="field"><label>Molde Code（系列公母座区分，可增减行）</label>
+      <table class="mc-table"><thead><tr><th>NO.</th><th>Molde Code</th><th>规格 Spec</th><th>PDF</th><th>3D</th><th></th></tr></thead>
+      <tbody id="mc_body">${mcRows}</tbody></table>
+      <button class="btn btn-gray btn-sm" onclick="addMoldeRow()">+ 增加一行</button>
+    </div>
+    <div class="field"><label>尺寸图 Dimensions Image</label>
+      <div class="img-row"><img id="f_dim_prev" src="${p.dimensions_img||''}" onerror="this.style.display='none'">
+        <input id="f_dim" value="${esc(p.dimensions_img)}" style="flex:1">
+        <input type="file" id="f_dim_file" accept="image/*" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('f_dim_file','f_dim','f_dim_prev','products')">上传</button></div>
+    </div>
+    <div class="two-lang">
+      <div class="lab">产品说明 Product Description（支持 HTML）</div>
+      <div class="inner">
+        <div><label>中文</label><textarea id="f_pd_zh" style="min-height:120px">${esc(p.product_desc_zh)}</textarea></div>
+        <div><label>English</label><textarea id="f_pd_en" style="min-height:120px">${esc(p.product_desc_en)}</textarea></div>
+      </div>
+    </div>
+    <div class="field"><label>关联产品 ID（逗号分隔，可选） <span class="hint">填写其它产品的 id，前台展示"相关产品"</span></label>
+      <input id="f_related" value="${esc((Array.isArray(p.related)?p.related:[]).join(','))}"></div>
+    <div class="field"><label>排序 Sort Order <span class="hint">数字越小越靠前</span></label><input id="f_sort" type="number" value="${p.sort_order||0}"></div>
+    <div class="modal-actions">
+      <button class="btn btn-gray" onclick="closeModal()">取消</button>
+      <button class="btn" onclick="saveProduct('${p.id||''}')">保存</button>
+    </div>`;
+  openModal();
+}
+function moldeRow(i,r){
+  r=r||{no:'',code:'',spec:'',pdf:'',model3d:''};
+  return `<tr>
+    <td><input value="${esc(r.no)}" data-mc="no"></td>
+    <td><input value="${esc(r.code)}" data-mc="code"></td>
+    <td><input value="${esc(r.spec)}" data-mc="spec"></td>
+    <td><input value="${esc(r.pdf)}" data-mc="pdf" placeholder="PDF URL"></td>
+    <td><input value="${esc(r.model3d)}" data-mc="model3d" placeholder="3D URL"></td>
+    <td><button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">×</button></td>
+  </tr>`;
+}
+function addMoldeRow(){ $('#mc_body').insertAdjacentHTML('beforeend', moldeRow()); }
+async function doUpload(fileId,urlId,prevId,folder){
+  const f=$(('#'+fileId)).files[0];
+  if(!f){ alert('请先选择文件'); return; }
+  const url=await uploadImage(f,folder);
+  if(url){ $('#'+urlId).value=url; if(prevId && $('#'+prevId)) $('#'+prevId).src=url, $('#'+prevId).style.display='block'; }
+}
+function collectMolde(){
+  return $$('#mc_body tr').map(tr=>{
+    const g=k=>$(`[data-mc="${k}"]`,tr).value.trim();
+    return {no:g('no'),code:g('code'),spec:g('spec'),pdf:g('pdf'),model3d:g('model3d')};
+  }).filter(r=>r.code||r.no);
+}
+async function saveProduct(id){
+  const payload={
+    category:$('#f_cat').value,
+    name_zh:$('#f_name_zh').value.trim(),
+    name_en:$('#f_name_en').value.trim(),
+    spec:$('#f_spec').value.trim(),
+    model:$('#f_model').value.trim(),
+    packaging:$('#f_pack').value.trim(),
+    description_zh:$('#f_desc_zh').value,
+    description_en:$('#f_desc_en').value,
+    image_url:$('#f_img').value.trim(),
+    pdf_url:$('#f_pdf').value.trim(),
+    basic_info_zh:$('#f_bi_zh').value,
+    basic_info_en:$('#f_bi_en').value,
+    molde_code:collectMolde(),
+    dimensions_img:$('#f_dim').value.trim(),
+    product_desc_zh:$('#f_pd_zh').value,
+    product_desc_en:$('#f_pd_en').value,
+    related:$('#f_related').value.split(',').map(s=>s.trim()).filter(Boolean),
+    sort_order:parseInt($('#f_sort').value||'0',10)
+  };
+  let res;
+  if(id){ res=await sb.from('products').update(payload).eq('id',id); }
+  else { res=await sb.from('products').insert(payload); }
+  if(res.error){ alert('保存失败：'+res.error.message); return; }
+  closeModal(); loadProducts(); alert('已保存');
+}
+async function delProduct(id){
+  if(!confirm('确认删除该产品？')) return;
+  const {error}=await sb.from('products').delete().eq('id',id);
+  if(error){ alert('删除失败：'+error.message); return; }
+  loadProducts();
+}
+
+/* ════════ 页面装修 site_content ════════ */
+async function loadContent(){
+  const {data,error}=await sb.from('site_content').select('*').order('key');
+  if(error){ $('#contentList').innerHTML='<div class="err">读取失败：'+error.message+'</div>'; return; }
+  window._content=data||[]; window._pagesLoaded=true;
+  renderContent();
+}
+function renderContent(){
+  const d=window._content||[];
+  if(!d.length){ $('#contentList').innerHTML='<div class="empty">暂无内容键，点击"新增内容键"。</div>'; return; }
+  let html='<table class="tbl"><thead><tr><th>键 Key</th><th>类型</th><th>中文值</th><th>英文值</th><th>操作</th></tr></thead><tbody>';
+  d.forEach(c=>{
+    html+=`<tr>
+      <td><code>${esc(c.key)}</code></td>
+      <td><span class="tag ${c.type==='image'?'':'off'}">${c.type==='image'?'图片':'文本'}</span></td>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.type==='image'?(c.value_zh?'<img src="'+c.value_zh+'" style="height:30px">':'（空）'):esc(c.value_zh||'（空）')}</td>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.type==='image'?(c.value_en?'<img src="'+c.value_en+'" style="height:30px">':'（空）'):esc(c.value_en||'（空）')}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editContent('${c.key}')">编辑</button> <button class="btn btn-danger btn-sm" onclick="delContent('${c.key}')">删除</button></td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  $('#contentList').innerHTML=html;
+}
+function editContent(key){
+  const c=(window._content||[]).find(x=>x.key===key)||{key:'',type:'text',value_zh:'',value_en:''};
+  const isImg=c.type==='image';
+  const box=$('#modalBox');
+  box.innerHTML=`
+    <h3>编辑内容键 <button class="close" onclick="closeModal()">&times;</button></h3>
+    <div class="field"><label>键 Key <span class="hint">不可修改</span></label><input value="${esc(c.key)}" disabled></div>
+    <div class="field"><label>类型 Type</label><select id="c_type" onchange="contentTypeChanged()"><option value="text" ${!isImg?'selected':''}>文本 Text</option><option value="image" ${isImg?'selected':''}>图片 Image</option></select></div>
+    <div id="c_text_fields" style="${isImg?'display:none':''}">
+      <div class="two-lang"><div class="lab">文本 Text</div><div class="inner">
+        <div><label>中文</label><textarea id="c_vzh">${esc(c.value_zh)}</textarea></div>
+        <div><label>English</label><textarea id="c_ven">${esc(c.value_en)}</textarea></div>
+      </div></div>
+    </div>
+    <div id="c_img_fields" style="${isImg?'':'display:none'}">
+      <div class="field"><label>图片(中文) Image ZH</label><div class="img-row"><img id="c_prev_zh" src="${c.value_zh||''}" onerror="this.style.display='none'"><input id="c_vzh_img" value="${esc(c.value_zh)}" style="flex:1"><input type="file" id="c_f_zh" accept="image/*" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('c_f_zh','c_vzh_img','c_prev_zh','pages')">上传</button></div></div>
+      <div class="field"><label>图片(英文) Image EN</label><div class="img-row"><img id="c_prev_en" src="${c.value_en||''}" onerror="this.style.display='none'"><input id="c_ven_img" value="${esc(c.value_en)}" style="flex:1"><input type="file" id="c_f_en" accept="image/*" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('c_f_en','c_ven_img','c_prev_en','pages')">上传</button></div></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-gray" onclick="closeModal()">取消</button><button class="btn" onclick="saveContent('${esc(c.key)}')">保存</button></div>`;
+  openModal();
+}
+function contentTypeChanged(){
+  const t=$('#c_type').value;
+  $('#c_text_fields').style.display = t==='text'?'':'none';
+  $('#c_img_fields').style.display = t==='image'?'':'none';
+}
+async function saveContent(key){
+  const t=$('#c_type').value;
+  let vzh,vne;
+  if(t==='image'){ vzh=$('#c_vzh_img').value.trim(); vne=$('#c_ven_img').value.trim()||vzh; }
+  else { vzh=$('#c_vzh').value; vne=$('#c_ven').value; }
+  const {error}=await sb.from('site_content').upsert({key,type:t,value_zh:vzh,value_en:vne});
+  if(error){ alert('保存失败：'+error.message); return; }
+  closeModal(); loadContent(); alert('已保存');
+}
+async function addKey(){
+  const key=prompt('请输入内容键 Key（英文/数字/下划线，如 hero_about_title）：');
+  if(!key) return;
+  const k=key.trim();
+  if(!/^[a-zA-Z0-9_]+$/.test(k)){ alert('键名只能包含字母、数字、下划线'); return; }
+  const {error}=await sb.from('site_content').insert({key:k,type:'text',value_zh:'',value_en:''});
+  if(error){ alert('创建失败：'+error.message); return; }
+  loadContent(); editContent(k);
+}
+async function delContent(key){
+  if(!confirm('确认删除该内容键？前台对应位置将恢复静态默认内容。')) return;
+  const {error}=await sb.from('site_content').delete().eq('key',key);
+  if(error){ alert('删除失败：'+error.message); return; }
+  loadContent();
+}
+
+/* ════════ 文章管理 ════════ */
+async function loadArticles(){
+  const {data,error}=await sb.from('articles').select('*').order('published_at','desc');
+  if(error){ $('#articleList').innerHTML='<div class="err">读取失败：'+error.message+'</div>'; return; }
+  window._articles=data||[]; window._articlesLoaded=true;
+  renderArticles();
+}
+function renderArticles(){
+  const d=window._articles||[];
+  if(!d.length){ $('#articleList').innerHTML='<div class="empty">暂无文章，点击"新增文章"。</div>'; return; }
+  let html='<table class="tbl"><thead><tr><th>封面</th><th>标题(中/英)</th><th>发布日期</th><th>状态</th><th>操作</th></tr></thead><tbody>';
+  d.forEach(a=>{
+    html+=`<tr>
+      <td><img class="thumb" src="${a.cover_image||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'"></td>
+      <td><b>${esc(a.title_zh)}</b><br><span style="color:var(--muted);font-size:12px">${esc(a.title_en)}</span></td>
+      <td>${a.published_at?a.published_at.slice(0,10):'-'}</td>
+      <td><span class="tag ${a.published?'':'off'}">${a.published?'已发布':'草稿'}</span></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editArticle('${a.id}')">编辑</button> <button class="btn btn-danger btn-sm" onclick="delArticle('${a.id}')">删除</button></td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  $('#articleList').innerHTML=html;
+}
+function editArticle(id){
+  sb.from('articles').select('*').eq('id',id).single().then(({data})=>editArticleForm(data));
+}
+function addArticle(){ editArticleForm(null); }
+function editArticleForm(a){
+  a=a||{title_zh:'',title_en:'',body_zh:'',body_en:'',cover_image:'',published:true,published_at:new Date().toISOString()};
+  const box=$('#modalBox');
+  box.innerHTML=`
+    <h3>文章编辑 <button class="close" onclick="closeModal()">&times;</button></h3>
+    <div class="two-lang"><div class="lab">标题 Title</div><div class="inner">
+      <div><label>中文</label><input id="a_tzh" value="${esc(a.title_zh)}"></div>
+      <div><label>English</label><input id="a_ten" value="${esc(a.title_en)}"></div>
+    </div></div>
+    <div class="field"><label>封面图 Cover Image</label><div class="img-row"><img id="a_prev" src="${a.cover_image||''}" onerror="this.style.display='none'"><input id="a_cover" value="${esc(a.cover_image)}" style="flex:1"><input type="file" id="a_f" accept="image/*" style="width:auto"><button class="btn btn-gray btn-sm" onclick="doUpload('a_f','a_cover','a_prev','articles')">上传</button></div></div>
+    <div class="two-lang"><div class="lab">正文 Body（支持 HTML）</div><div class="inner">
+      <div><label>中文</label><textarea id="a_bzh" style="min-height:160px">${esc(a.body_zh)}</textarea></div>
+      <div><label>English</label><textarea id="a_ben" style="min-height:160px">${esc(a.body_en)}</textarea></div>
+    </div></div>
+    <div class="field row2">
+      <div><label>发布状态</label><select id="a_pub"><option value="true" ${a.published?'selected':''}>已发布</option><option value="false" ${!a.published?'selected':''}>草稿</option></select></div>
+      <div><label>发布日期</label><input id="a_date" type="date" value="${a.published_at?a.published_at.slice(0,10):''}"></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-gray" onclick="closeModal()">取消</button><button class="btn" onclick="saveArticle('${a.id||''}')">保存</button></div>`;
+  openModal();
+}
+async function saveArticle(id){
+  const payload={
+    title_zh:$('#a_tzh').value.trim(),
+    title_en:$('#a_ten').value.trim(),
+    body_zh:$('#a_bzh').value,
+    body_en:$('#a_ben').value,
+    cover_image:$('#a_cover').value.trim(),
+    published:$('#a_pub').value==='true',
+    published_at:($('#a_date').value?$('#a_date').value+'T08:00:00':'')||null
+  };
+  let res;
+  if(id){ res=await sb.from('articles').update(payload).eq('id',id); }
+  else { res=await sb.from('articles').insert(payload); }
+  if(res.error){ alert('保存失败：'+res.error.message); return; }
+  closeModal(); loadArticles(); alert('已保存');
+}
+async function delArticle(id){
+  if(!confirm('确认删除该文章？')) return;
+  const {error}=await sb.from('articles').delete().eq('id',id);
+  if(error){ alert('删除失败：'+error.message); return; }
+  loadArticles();
+}
+
+/* ════════ Modal 控制 ════════ */
+function openModal(){ $('#modalBg').classList.add('show'); }
+function closeModal(){ $('#modalBg').classList.remove('show'); $('#modalBox').innerHTML=''; }
+$('#modalBg').addEventListener('click',e=>{ if(e.target===$('#modalBg')) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+/* 绑定新增按钮 */
+$('#addProductBtn').addEventListener('click',addProduct);
+$('#addKeyBtn').addEventListener('click',addKey);
+$('#addArticleBtn').addEventListener('click',addArticle);
+
+/* 启动 */
+checkSession();
+</script>
+</body>
+</html>
