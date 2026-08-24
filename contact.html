@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>联系我们 - 佳盈盛电子 JAYINCO | Contact</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#E2231A;--primary-d:#B71C1C;--accent:#FF5722;
+  --bg:#ffffff;--bg2:#f7f6f5;--text:#1a1a1a;--muted:#555;
+  --line:#e8e8ea;--card:#ffffff;--radius:6px;
+  --shadow:0 6px 24px rgba(226,35,26,.08);
+  --nav-bg:rgba(255,255,255,.95);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.en{display:none;}.zh{display:inline;}.zh.block{display:block;}
+#langToggle:checked ~ * .en{display:inline;}#langToggle:checked ~ * .en.block{display:block;}
+#langToggle:checked ~ * .zh{display:none;}#langToggle:checked ~ * .zh.block{display:none;}
+
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);}
+.logo img{height:40px;width:auto;}
+.logo-text .lt{font-weight:900;font-size:17px;letter-spacing:.02em;color:var(--text);}
+.logo-text .ls{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;font-weight:600;font-size:14px;color:var(--text);opacity:.75;transition:.2s;padding:6px 0;border-bottom:2px solid transparent;}
+.nav-links a:hover,a.active{opacity:1;color:var(--primary);border-bottom-color:var(--primary);}
+.lang-toggle{display:flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin-left:16px;}
+.lang-toggle label{background:transparent;border:none;padding:6px 14px;font:700 12px/1 sans-serif;color:var(--muted);cursor:pointer;display:block;transition:.15s;}
+#langToggle:not(:checked)~* label[for="langZh"],#langToggle:checked~* label[for="langEn"]{background:var(--primary);color:#fff;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+.section{padding:70px 0;}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.15em;color:var(--primary);margin-bottom:10px;text-transform:uppercase;}
+h2{font-weight:900;font-size:32px;color:var(--text);line-height:1.25;}
+h3{font-weight:700;font-size:18px;color:var(--text);}
+p{color:var(--muted);font-size:15px;}
+
+.page-hero{padding:80px 0 56px;background:url('banner-contact.png') center/cover no-repeat;position:relative;}
+.page-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.55),rgba(226,35,26,.25));}
+.page-hero .wrap{position:relative;z-index:1;}
+.page-hero .eyebrow{color:rgba(255,255,255,.85);}
+.page-hero h1{font-weight:900;font-size:38px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3);}
+
+/* ═══ CONTACT GRID ═══ */
+.contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;margin-top:36px;}
+
+/* ═══ INFO CARDS ═══ */
+.info-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:28px 24px;margin-bottom:18px;display:flex;gap:16px;align-items:flex-start;}
+.info-icon{width:44px;height:44px;border-radius:10px;background:rgba(226,35,26,.08);display:grid;place-items:center;flex-shrink:0;}
+.info-icon svg{width:22px;height:22px;stroke:var(--primary);fill:none;stroke-width:1.8;}
+.info-card h4{font-size:15px;margin-bottom:4px;}
+.info-card p{font-size:13.5px;line-height:1.6;}
+
+/* ═══ FORM ═══ */
+.form-box{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:36px 32px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-group{margin-bottom:16px;}
+.form-group.full{grid-column:1/-1;}
+label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+input,select,textarea{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--radius);font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);transition:.15s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(226,35,26,.08);}
+textarea{resize:vertical;min-height:110px;}
+.submit-btn{width:100%;padding:14px;border-radius:var(--radius);font-weight:800;font-size:15px;cursor:pointer;border:2px solid var(--primary);background:var(--primary);color:#fff;transition:.2s;margin-top:8px;}
+.submit-btn:hover{background:var(--primary-d);border-color:var(--primary-d);}
+
+/* ═══ MAP PLACEHOLDER ═══ */
+.map-placeholder{margin-top:36px;border:1.5px solid var(--line);border-radius:var(--radius);height:280px;background:var(--bg2);display:grid;place-items:center;color:var(--muted);font-size:14px;}
+
+footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:40px;}
+.foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;}
+footer h4{font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em;}
+footer a{color:#9aa0a8;text-decoration:none;font-size:13.5px;line-height:2.2;display:block;transition:.15s;}
+footer a:hover{color:var(--primary);}
+footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
+.foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-logo img{height:32px;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 0;display:flex;justify-content:space-between;font-size:12.5px;opacity:.45;}
+
+.text-center{text-align:center;}
+.mt-2{margin-top:18px;}
+.mb-2{margin-bottom:20px;}
+.ic{width:24px;height:24px;stroke:var(--primary);fill:none;stroke-width:1.8;}
+
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .foot-main{grid-template-columns:1fr 1fr;gap:26px;}
+  .nav-links{display:none;}
+  .page-hero h1{font-size:30px;}
+}
+@media(max-width:480px){.foot-main{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<input type="checkbox" id="langToggle" hidden>
+
+<!-- ═══ NAV ═══ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="logo.png" alt="JAYINCO Logo"><div class="logo-text"><div class="lt">佳盈盛电子</div><div class="ls">JAYINCO</div></div></a>
+    <div style="display:flex;align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a></li>
+        <li><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a></li>
+        <li><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a></li>
+        <li><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a></li>
+        <li><a href="contact.html" class="active"><span class="zh">联系我们</span><span class="en">Contact</span></a></li>
+      </ul>
+      <div class="lang-toggle"><label for="langToggle" id="langZh">中文</label><label for="langToggle" id="langEn">EN</label></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero" data-cms-bg="banner_contact">
+  <div class="wrap">
+    <div class="eyebrow"><span class="zh">联系我们</span><span class="en">Contact Us</span></div>
+    <h1 data-cms="hero_contact_title"><span class="zh">与我们取得联系</span><span class="en block">Get in Touch With Us</span></h1>
+    <p style="font-size:16px;margin-top:10px;" data-cms="hero_contact_sub"><span class="zh">无论产品咨询、技术支持还是商务合作，我们随时为您服务。</span><span class="en block">For product inquiries, technical support or business partnerships — we're here to help.</span></p>
+  </div>
+</section>
+
+<!-- ═══ CONTACT CONTENT ═══ -->
+<section class="section">
+  <div class="wrap contact-grid">
+
+    <!-- Left: Contact Info -->
+    <div>
+      <div class="info-card">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <div>
+          <h4><span class="zh">公司地址</span><span class="en">Address</span></h4>
+          <p data-cms="contact_address"><span class="zh">广东省东莞市 XX 镇工业园 XX 路 XX 号<br>邮编：523000</span><span class="en block">XX Road, XX Industrial Park<br>Dongguan, Guangdong, China 523000</span></p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+        <div>
+          <h4><span class="zh">电子邮箱</span><span class="en">Email</span></h4>
+          <p data-cms="contact_email">sales@jayinco.com<br>info@jayinco.com</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+        <div>
+          <h4><span class="zh">联系电话</span><span class="en">Phone</span></h4>
+          <p data-cms="contact_phone"><span class="zh">电话：+86 769 XXXX XXXX<br>传真：+86 769 XXXX XXXX</span><span class="en block">Tel: +86 769 XXXX XXXX<br>Fax: +86 769 XXXX XXXX</span></p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div>
+          <h4><span class="zh">工作时间</span><span class="en">Working Hours</span></h4>
+          <p><span class="zh">周一至周五：08:30 – 17:30（北京时间）<br>周六：09:00 – 12:00</span><span class="en block">Mon – Fri: 08:30 – 17:30 (CST)<br>Sat: 09:00 – 12:00</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="form-box">
+      <h3 style="margin-bottom:20px;"><span class="zh">发送询盘</span><span class="en">Send Inquiry</span></h3>
+      <form action="#" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label><span class="zh">姓名 *</span><span class="en">Name *</span></label>
+            <input type="text" name="name" required placeholder="">
+          </div>
+          <div class="form-group">
+            <label><span class="zh">公司名称</span><span class="en">Company</span></label>
+            <input type="text" name="company" placeholder="">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label><span class="zh">电子邮箱 *</span><span class="en">Email *</span></label>
+            <input type="email" name="email" required placeholder="">
+          </div>
+          <div class="form-group">
+            <label><span class="zh">联系电话</span><span class="en">Phone</span></label>
+            <input type="tel" name="phone" placeholder="">
+          </div>
+        </div>
+        <div class="form-group full">
+          <label><span class="zh">咨询主题</span><span class="en">Subject</span></label>
+          <select name="subject">
+            <option value=""><span class="zh">请选择...</span><span class="en">Select...</span></option>
+            <option value="product"><span class="zh">产品咨询</span><span class="en">Product Inquiry</span></option>
+            <option value="quote"><span class="zh">报价请求</span><span class="en">Quote Request</span></option>
+            <option value="sample"><span class="zh">样品申请</span><span class="en">Sample Request</span></option>
+            <option value="custom"><span class="zh">定制开发</span><span class="en">Custom Development</span></option>
+            <option value="support"><span class="zh">技术支持</span><span class="en">Technical Support</span></option>
+            <option value="other"><span class="zh">其他</span><span class="en">Other</span></option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label><span class="zh">留言内容 *</span><span class="en">Message *</span></label>
+          <textarea name="message" required placeholder=""></textarea>
+        </div>
+        <button type="submit" class="submit-btn"><span class="zh">提交询盘 &rarr;</span><span class="en">Submit Inquiry &rarr;</span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Map Placeholder -->
+  <div class="wrap">
+    <div class="map-placeholder">
+      <span class="zh">&#128205; 地图加载区域（可接入高德/百度地图 API）</span>
+      <span class="en block">&#128205; Map Area (Amap / Baidu Maps API integration)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="JAYINCO"></div>
+      <p><span class="zh">专业连接器制造商，致力为全球客户提供高可靠的互连解决方案。</span><span class="en block">Professional connector manufacturer delivering reliable interconnection solutions worldwide.</span></p>
+    </div>
+    <div>
+      <h4><span class="zh">快速链接</span><span class="en">Quick Links</span></h4>
+      <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">主要产品</span><span class="en">Products</span></h4>
+      <a href="products.html"><span class="zh">线对板连接器</span><span class="en">Wire-to-Board</span></a><a href="products.html"><span class="zh">板对板连接器</span><span class="en">Board-to-Board</span></a><a href="products.html"><span class="zh">线对线连接器</span><span class="en">Wire-to-Wire</span></a><a href="products.html"><span class="zh">USB连接器</span><span class="en">USB Connectors</span></a><a href="products.html"><span class="zh">RF射频连接器</span><span class="en">RF Coaxial</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
+      <p style="font-weight:700;color:#e0e0e0;">JAYINCO (佳盈盛电子)</p>
+      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan<br>Guangdong, China</span></p>
+      <p>sales@jayinco.com</p>
+      <p>+86 769 XXXX XXXX</p>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>&copy; 2026 JAYINCO 佳盈盛电子. <span class="zh">版权所有。</span><span class="en">All rights reserved.</span></span>
+    <span>China &middot; 中国</span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script src="cms.js"></script>
+</body>
+</html>
