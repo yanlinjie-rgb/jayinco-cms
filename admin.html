@@ -159,60 +159,121 @@ a{color:var(--primary);text-decoration:none;}
 <script src="cms-config.js"></script>
 <script src="cms-client.js"></script>
 <script>
-/* ════════ 初始化 ════════ */
-const C = window.CMS;
-const sb = C.sb;
-const $ = (s,el=document)=>el.querySelector(s);
-const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+/* ════════ 初始化（防崩溃包裹）════════ */
+(function(){
+  var C = window.CMS;
+  var sb = C ? C.sb : null;
+  var $ = function(s,el){return(el||document).querySelector(s);};
+  var $$ = function(s,el){return[...((el||document).querySelectorAll(s))];};
 
-if(!C.configured){
-  document.getElementById('configWarn').style.display='block';
-  document.getElementById('email').disabled=true;
-  document.getElementById('password').disabled=true;
-  document.getElementById('loginBtn').disabled=true;
-}
+  /* 调试信息显示函数 */
+  function showErr(msg){
+    var el = document.getElementById('loginErr');
+    if(el) el.textContent = msg;
+    console.error('[Admin]', msg);
+  }
 
-/* ════════ 登录 / 会话 ════════ */
-async function checkSession(){
-  if(!C || !C.configured || !sb){ console.warn('[Admin] 未配置或 sb 为空'); return; }
-  try {
-    const {data,error} = await sb.auth.getSession();
-    if(error) { console.warn('[Admin] getSession error:', error.message); showLogin(); return; }
-    if(data.session){ showApp(data.session.user); }
-    else { showLogin(); }
-  } catch(e){ console.error('[Admin] getSession crash:', e); showLogin(); }
-}
-function showLogin(){ $('#loginView').style.display='grid'; $('#appView').style.display='none'; }
-function showApp(user){
-  $('#loginView').style.display='none'; $('#appView').style.display='block';
-  $('#userEmail').textContent = user.email || '';
-  loadProducts();
-}
-$('#loginBtn').addEventListener('click', async function(){
-  const email=$('#email').value.trim(), pwd=$('#password').value;
-  $('#loginErr').textContent='';
-  if(!email){ $('#loginErr').textContent='请输入邮箱'; return; }
-  if(!pwd){ $('#loginErr').textContent='请输入密码'; return; }
-  if(!sb){ $('#loginErr').textContent='错误：Supabase 客户端未初始化，请检查 cms-config.js'; return; }
-  try {
-    const {data,error} = await sb.auth.signInWithPassword({email,password:pwd});
-    if(error){ $('#loginErr').textContent='登录失败：'+error.message; return; }
-    // 成功时 onAuthStateChange 会自动触发 showApp
-  } catch(e){ $('#loginErr').textContent='异常：'+e.message; console.error('[Admin] login crash:', e); }
-});
-$('#logoutBtn').addEventListener('click', async ()=>{ 
-  try{ await sb.auth.signOut(); }catch(e){console.error(e);} 
-  showLogin(); 
-});
-if(sb && sb.auth){ 
-  sb.auth.onAuthStateChange((_e,s)=>{ 
-    if(s.session) showApp(s.session.user); else showLogin(); 
-  }); 
-  checkSession(); 
-} else { 
-  console.warn('[Admin] sb.auth 不存在，跳过会话检查'); 
-  showLogin(); 
-}
+  /* 未配置时禁用表单 */
+  if(!C || !C.configured){
+    var w = document.getElementById('configWarn');
+    if(w) w.style.display='block';
+    var e = document.getElementById('email'); if(e) e.disabled=true;
+    var p = document.getElementById('password'); if(p) p.disabled=true;
+    var b = document.getElementById('loginBtn'); if(b){ b.disabled=true; b.textContent='未配置'; }
+    return; // ← 未配置则不执行后续代码，避免 sb 为 null 崩溃
+  }
+
+  /* ════════ 登录 / 会话 ════════ */
+  function showLogin(){
+    var lv = $('#loginView'); if(lv) lv.style.display='grid';
+    var av = $('#appView'); if(av) av.style.display='none';
+  }
+  function showApp(user){
+    var lv = $('#loginView'); if(lv) lv.style.display='none';
+    var av = $('#appView'); if(av) av.style.display='block';
+    var ue = $('#userEmail'); if(ue) ue.textContent = user.email || '';
+    if(typeof loadProducts === 'function') loadProducts();
+  }
+
+  async function checkSession(){
+    if(!sb){ showErr('Supabase 客户端未初始化'); showLogin(); return; }
+    try {
+      var r = await sb.auth.getSession();
+      if(r.error){ showErr('会话检查：'+r.error.message); showLogin(); return; }
+      if(r.data.session){ showApp(r.data.user); }
+      else { showLogin(); }
+    } catch(e){ showErr('会话异常：'+e.message); showLogin(); }
+  }
+
+  /* 绑定登录按钮 —— 放在 DOMContentLoaded 里确保 100% 生效 */
+  document.addEventListener('DOMContentLoaded', function(){
+    try {
+      var btn = document.getElementById('loginBtn');
+      if(!btn){ showErr('致命错误：找不到登录按钮元素'); return; }
+
+      btn.addEventListener('click', async function(){
+        var emailEl = document.getElementById('email');
+        var pwdEl = document.getElementById('password');
+        var email = emailEl ? emailEl.value.trim() : '';
+        var pwd = pwdEl ? pwdEl.value : '';
+        showErr('');
+
+        if(!email){ showErr('请输入邮箱'); return; }
+        if(!pwd){ showErr('请输入密码'); return; }
+        if(!sb){ showErr('错误：Supabase 客户端未初始化（检查 cms-config.js）'); return; }
+
+        btn.disabled = true;
+        btn.textContent = '登录中…';
+
+        try {
+          var r = await sb.auth.signInWithPassword({email: email, password: pwd});
+          if(r.error){
+            showErr('登录失败：'+r.error.message);
+            btn.disabled = false;
+            btn.textContent = '登录后台';
+            return;
+          }
+          // 成功 → onAuthStateChange 触发 showApp
+        } catch(e){
+          showErr('异常：'+e.message);
+          btn.disabled = false;
+          btn.textContent = '登录后台';
+        }
+      });
+
+      /* 退出按钮 */
+      var logoutBtn = document.getElementById('logoutBtn');
+      if(logoutBtn){
+        logoutBtn.addEventListener('click', async function(){
+          try{ if(sb && sb.auth) await sb.auth.signOut(); }catch(e){}
+          showLogin();
+          var lb = document.getElementById('loginBtn');
+          if(lb){ lb.disabled=false; lb.textContent='登录后台'; }
+        });
+      }
+
+      /* Auth 状态监听 */
+      if(sb && sb.auth){
+        sb.auth.onAuthStateChange(function(event, session){
+          if(session && session.user) showApp(session.user);
+          else showLogin();
+        });
+        checkSession();
+      } else {
+        showErr('警告：sb.auth 不存在，无法检测登录状态');
+        showLogin();
+      }
+
+    } catch(initErr){
+      showErr('初始化崩溃：'+initErr.message+'（行号：'+(initErr.lineNumber||'?')+'）');
+      console.error('[Admin] init crash:', initErr);
+    }
+  });
+})();
+
+/* ════════ 全局工具函数（后续模块需要） ════════ */
+var $ = function(s,el){return(el||document).querySelector(s);};
+var $$ = function(s,el){return[...((el||document).querySelectorAll(s))];};
 
 /* ════════ 侧边切换 ════════ */
 $$('.sidebar button').forEach(b=>{
