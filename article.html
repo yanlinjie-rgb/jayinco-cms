@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章详情 - 佳盈盛电子 JAYINCO | Article</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#E2231A;--primary-d:#B71C1C;--bg:#fff;--text:#1a1a1a;--muted:#666;--line:#e8e8ea;--nav-bg:rgba(255,255,255,.95);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.en{display:none;}.zh{display:inline;}.zh.block{display:block;}
+#langToggle:checked ~ * .en{display:inline;}#langToggle:checked ~ * .en.block{display:block;}
+#langToggle:checked ~ * .zh{display:none;}#langToggle:checked ~ * .zh.block{display:none;}
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);}
+.logo img{height:40px;width:auto;}
+.logo-text .lt{font-weight:900;font-size:17px;letter-spacing:.02em;}
+.logo-text .ls{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;font-weight:600;font-size:14px;color:var(--text);opacity:.75;transition:.2s;padding:6px 0;border-bottom:2px solid transparent;}
+.nav-links a:hover,a.active{opacity:1;color:var(--primary);border-bottom-color:var(--primary);}
+.lang-toggle{display:flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin-left:16px;}
+.lang-toggle label{background:transparent;border:none;padding:6px 14px;font:700 12px/1 sans-serif;color:var(--muted);cursor:pointer;display:block;}
+#langToggle:not(:checked)~* label[for="langZh"],#langToggle:checked~* label[for="langEn"]{background:var(--primary);color:#fff;}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px;}
+.breadcrumb{padding:16px 0;font-size:13px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);text-decoration:none;}
+.breadcrumb a:hover{color:var(--primary);}
+.breadcrumb span.sep{margin:0 8px;opacity:.4;}
+.article-head{padding:10px 0 30px;}
+.article-head .date{font-size:13px;font-weight:700;color:var(--primary);}
+.article-head h1{font-size:30px;font-weight:900;line-height:1.35;margin:8px 0 14px;}
+.article-head img{max-width:100%;border-radius:8px;margin-top:10px;}
+footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:50px;}
+.foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px;}
+footer h4{font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em;}
+footer a{color:#9aa0a8;text-decoration:none;font-size:13.5px;line-height:2.2;display:block;}
+footer a:hover{color:var(--primary);}
+footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
+.foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-logo img{height:32px;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 24px;display:flex;justify-content:space-between;font-size:12.5px;opacity:.45;max-width:1200px;margin:0 auto;}
+</style>
+</head>
+<body>
+<input type="checkbox" id="langToggle" hidden>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="logo.png" alt="JAYINCO Logo"><div class="logo-text"><div class="lt">佳盈盛电子</div><div class="ls">JAYINCO</div></div></a>
+    <div style="display:flex;align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a></li>
+        <li><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a></li>
+        <li><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a></li>
+        <li><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a></li>
+        <li><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a></li>
+      </ul>
+      <div class="lang-toggle"><label for="langToggle" id="langZh">中文</label><label for="langToggle" id="langEn">EN</label></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb">
+    <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><span class="sep">&rsaquo;</span>
+    <a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><span class="sep">&rsaquo;</span>
+    <span class="zh">文章详情</span><span class="en">Article</span>
+  </div>
+  <article class="article-head" id="cmsArticle"></article>
+</div>
+
+<footer>
+  <div class="foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="JAYINCO"></div>
+      <p><span class="zh">专业连接器制造商，致力为全球客户提供高可靠的互连解决方案。</span><span class="en block">Professional connector manufacturer delivering reliable interconnection solutions worldwide.</span></p>
+    </div>
+    <div><h4><span class="zh">快速链接</span><span class="en">Quick Links</span></h4>
+      <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a></div>
+    <div><h4><span class="zh">主要产品</span><span class="en">Products</span></h4>
+      <a href="products.html"><span class="zh">线对板连接器</span><span class="en">Wire-to-Board</span></a><a href="products.html"><span class="zh">板对板连接器</span><span class="en">Board-to-Board</span></a><a href="products.html"><span class="zh">USB连接器</span><span class="en">USB</span></a><a href="products.html"><span class="zh">汽车连接器</span><span class="en">Automotive</span></a></div>
+    <div><h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
+      <p style="font-weight:700;color:#e0e0e0;">JAYINCO (佳盈盛电子)</p>
+      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan, China</span></p>
+      <p>sales@jayinco.com</p><p>+86 769 XXXX XXXX</p></div>
+  </div>
+  <div class="foot-bottom"><span>&copy; 2026 JAYINCO 佳盈盛电子. <span class="zh">版权所有。</span><span class="en">All rights reserved.</span></span><span>China &middot; 中国</span></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script src="cms.js"></script>
+</body>
+</html>
