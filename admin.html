@@ -164,7 +164,12 @@ a{color:var(--primary);text-decoration:none;}
   var C = window.CMS;
   var sb = C ? C.sb : null;
   var $ = function(s,el){return(el||document).querySelector(s);};
-  var $$ = function(s,el){return[...((el||document).querySelectorAll(s))];};
+  var $$ = function(s,el){return[...((el||document).querySelectorAll(s))]};
+
+  /* 暴露到全局（后续模块 loadProducts/loadContent/loadArticles 在 IIFE 外需要用到） */
+  window._sb = sb;
+  window._$ = $;
+  window._$$ = $$;
 
   /* 调试信息显示函数 */
   function showErr(msg){
@@ -270,6 +275,11 @@ a{color:var(--primary);text-decoration:none;}
     }
   });
 })();
+
+/* ════════ 全局暴露（IIFE 内的 sb/$/$$ 供后续模块使用）════════ */
+var sb = window._sb;
+var $ = window._$;
+var $$ = window._$$;
 
 /* ════════ 全局工具函数（后续模块需要） ════════ */
 var $ = function(s,el){return(el||document).querySelector(s);};
