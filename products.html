@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品中心 - 佳盈盛电子 JAYINCO | Products</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#E2231A;--primary-d:#B71C1C;--accent:#FF5722;
+  --bg:#ffffff;--bg2:#f5f4f3;--bg3:#eeece9;--text:#1a1a1a;--muted:#666;
+  --line:#e0dedc;--card:#ffffff;--radius:6px;
+  --shadow:0 4px 20px rgba(226,35,26,.07);
+  --shadow-lg:0 10px 40px rgba(0,0,0,.1);
+  --nav-bg:rgba(255,255,255,.96);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans SC','Microsoft YaHei',Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.en{display:none;}.zh{display:inline;}.zh.block{display:block;}
+#langToggle:checked ~ * .en{display:inline;}#langToggle:checked ~ * .en.block{display:block;}
+#langToggle:checked ~ * .zh{display:none;}#langToggle:checked ~ * .zh.block{display:none;}
+
+/* ═══ NAV ═══ */
+.nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.nav-inner{max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);}
+.logo img{height:40px;width:auto;}
+.logo-text .lt{font-weight:900;font-size:17px;letter-spacing:.02em;color:var(--text);}
+.logo-text .ls{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;font-weight:600;font-size:14px;color:var(--text);opacity:.75;transition:.2s;padding:6px 0;border-bottom:2px solid transparent;}
+.nav-links a:hover,a.active{opacity:1;color:var(--primary);border-bottom-color:var(--primary);}
+.lang-toggle{display:flex;border:1.5px solid var(--line);border-radius:6px;overflow:hidden;margin-left:16px;}
+.lang-toggle label{background:transparent;border:none;padding:6px 14px;font:700 12px/1 sans-serif;color:var(--muted);cursor:pointer;display:block;transition:.15s;}
+#langToggle:not(:checked)~* label[for="langZh"],#langToggle:checked~* label[for="langEn"]{background:var(--primary);color:#fff;}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px;}
+
+/* ═══ PAGE HERO ═══ */
+.page-hero{padding:80px 0 56px;background:url('banner-products.png') center/cover no-repeat;position:relative;}
+.page-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.55),rgba(226,35,26,.25));}
+.page-hero .wrap{position:relative;z-index:1;}
+.page-hero h1{font-weight:900;font-size:36px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3);}
+.page-hero p{margin-top:8px;color:rgba(255,255,255,.88);font-size:15px;}
+
+/* ═══ CATEGORY ICON GRID (dg-switch style) ═══ */
+.cat-section{padding:44px 0 24px;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px 10px;}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px 12px;border-radius:var(--radius);cursor:pointer;transition:.2s;text-decoration:none;color:inherit;border:1.5px solid transparent;}
+.cat-item:hover{background:var(--bg2);border-color:var(--primary);transform:translateY(-2px);}
+.cat-item.active{background:rgba(226,35,26,.04);border-color:var(--primary);}
+.cat-icon{width:64px;height:64px;display:grid;place-items:center;}
+.cat-icon svg{width:100%;height:100%;stroke:var(--primary);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;}
+.cat-name{font-size:13px;font-weight:600;color:var(--text);text-align:center;line-height:1.35;}
+.cat-count{font-size:11px;color:var(--muted);}
+
+/* ═══ PRODUCT LIST (card style like dg-switch) ═══ */
+.prod-section{padding:24px 0 60px;}
+.section-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--primary);display:inline-block;}
+.prod-list{display:flex;flex-direction:column;gap:18px;}
+.prod-card{display:flex;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.25s;text-decoration:none;color:inherit;min-height:200px;}
+.prod-card:hover{box-shadow:var(--shadow);border-color:var(--primary);}
+.prod-card-img{width:260px;min-height:200px;background:var(--bg2);display:grid;place-items:center;flex-shrink:0;border-right:1.5px solid var(--line);padding:20px;position:relative;overflow:hidden;}
+.prod-card-img img{max-width:180px;max-height:160px;object-fit:contain;}
+.prod-card-img .placeholder-svg{width:120px;height:100px;stroke:var(--primary);fill:none;stroke-width:1.2;opacity:.35;}
+.prod-card-body{flex:1;padding:22px 26px;display:flex;flex-direction:column;}
+.prod-card-body h3{font-size:19px;font-weight:800;color:var(--text);margin-bottom:10px;line-height:1.3;}
+.prod-specs{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;margin-bottom:12px;}
+.spec-label{font-size:13px;font-weight:700;color:var(--muted);}
+.spec-value{font-size:13px;color:var(--text);}
+.prod-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:14px;flex:1;}
+.prod-actions{display:flex;gap:10px;margin-top:auto;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:700;text-decoration:none;transition:.2s;cursor:pointer;border:none;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-d);}
+.btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--primary);}
+.btn-outline:hover{background:rgba(226,35,26,.04);}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ═══ PAGINATION ═══ */
+.pagination{display:flex;justify-content:center;gap:8px;margin-top:36px;}
+.page-btn{padding:8px 16px;border:1.5px solid var(--line);border-radius:4px;font-size:13px;font-weight:600;color:var(--muted);background:#fff;cursor:pointer;transition:.15s;text-decoration:none;}
+.page-btn:hover,.page-btn.active{border-color:var(--primary);color:var(--primary);background:rgba(226,35,26,.03);}
+
+/* ═══ FOOTER ═══ */
+footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:40px;}
+.foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;}
+footer h4{font-size:13px;font-weight:700;color:#e0e0e0;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em;}
+footer a{color:#9aa0a8;text-decoration:none;font-size:13.5px;line-height:2.2;display:block;transition:.15s;}
+footer a:hover{color:var(--primary);}
+footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
+.foot-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-logo img{height:32px;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 0;display:flex;justify-content:space-between;font-size:12.5px;opacity:.45;}
+
+@media(max-width:900px){
+  .cat-grid{grid-template-columns:repeat(auto-fill,minwidth:110px,1fr));}
+  .prod-card{flex-direction:column;}
+  .prod-card-img{width:100%;min-height:180px;border-right:none;border-bottom:1.5px solid var(--line);}
+  .foot-main{grid-template-columns:1fr 1fr;gap:26px;}
+  .nav-links{display:none;}
+  .page-hero h1{font-size:28px;}
+}
+@media(max-width:480px){
+  .cat-grid{grid-template-columns:repeat(4,1fr);}
+  .cat-icon{width:50px;height:50px;}
+  .cat-name{font-size:11.5px;}
+  .foot-main{grid-template-columns:1fr;}
+  .prod-actions{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<input type="checkbox" id="langToggle" hidden>
+
+<!-- ═══ NAV ═══ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="logo.png" alt="JAYINCO Logo"><div class="logo-text"><div class="lt">佳盈盛电子</div><div class="ls">JAYINCO</div></div></a>
+    <div style="display:flex;align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a></li>
+        <li><a href="products.html" class="active"><span class="zh">产品中心</span><span class="en">Products</span></a></li>
+        <li><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a></li>
+        <li><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a></li>
+        <li><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a></li>
+      </ul>
+      <div class="lang-toggle"><label for="langToggle" id="langZh">中文</label><label for="langToggle" id="langEn">EN</label></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero" data-cms-bg="banner_products">
+  <div class="wrap">
+    <h1 data-cms="hero_products_title"><span class="zh">产品展示中心</span><span class="en block">Product Display Center</span></h1>
+    <p data-cms="hero_products_sub"><span class="zh">专业连接器产品矩阵 — 全系列互连解决方案</span><span class="en block">Professional Connector Portfolio — Full-Range Interconnect Solutions</span></p>
+  </div>
+</section>
+
+<!-- ═══ CATEGORY ICON GRID ═══ -->
+<section class="cat-section">
+  <div class="wrap">
+    <div class="cat-grid">
+
+      <!-- 1. 线对板连接器 -->
+      <a class="cat-item active" href="#" data-cat="wire-to-board">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="10" y="18" width="22" height="28" rx="3" stroke="currentColor" stroke-width="2"/><rect x="17" y="26" width="6" height="7" rx="1" fill="currentColor" opacity=".25"/><rect x="27" y="26" width="6" height="7" rx="1" fill="currentColor" opacity=".25"/><path d="M32 32h10M42 26v12" stroke="currentColor" stroke-width="2"/><rect x="46" y="18" width="18" height="28" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="55" cy="28" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="55" cy="36" r="3" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">线对板<br>连接器</span><span class="en block">Wire-to-<br>Board</span></span>
+      </a>
+
+      <!-- 2. 板对板连接器 -->
+      <a class="cat-item" href="#" data-cat="board-to-board">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="8" y="24" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/><rect x="36" y="24" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M28 32h8M32 28l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+        <span class="cat-name"><span class="zh">板对板<br>连接器</span><span class="en block">Board-to-<br>Board</span></span>
+      </a>
+
+      <!-- 3. 线对线连接器 -->
+      <a class="cat-item" href="#" data-cat="wire-to-wire">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><path d="M12 18v28M52 18v28M12 32h40" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="32" r="5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="52" cy="32" r="5" stroke="currentColor" stroke-width="2" fill="none"/><rect x="26" y="26" width="12" height="12" rx="2" fill="currentColor" opacity=".15" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">线对线<br>连接器</span><span class="en block">Wire-to-<br>Wire</span></span>
+      </a>
+
+      <!-- 4. USB系列 -->
+      <a class="cat-item" href="#" data-cat="usb">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="18" y="20" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><rect x="24" y="27" width="16" height="6" rx="1" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1"/><path d="M46 32h8" stroke="currentColor" stroke-width="2"/><rect x="54" y="24" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">USB<br>系列</span><span class="en block">USB<br>Series</span></span>
+      </a>
+
+      <!-- 5. FFC/FPC连接器 -->
+      <a class="cat-item" href="#" data-cat="ffc-fpc">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="10" y="24" width="30" height="16" rx="2" stroke="currentColor" stroke-width="2"/><line x1="16" y1="28" x2="16" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="28" x2="21" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="26" y1="28" x2="26" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="31" y1="28" x2="31" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="36" y1="28" x2="36" y2="36" stroke="currentColor" stroke-width="1.5"/><path d="M40 28h10l4 4-4 4H40" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
+        <span class="cat-name"><span class="zh">FFC/FPC<br>连接器</span><span class="en block">FFC/FPC<br>Connector</span></span>
+      </a>
+
+      <!-- 6. DC插座 -->
+      <a class="cat-item" href="#" data-cat="dc-jack">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="18" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="32" cy="32" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="32" cy="32" r="2" fill="currentColor" opacity=".3"/><line x1="50" y1="32" x2="58" y2="32" stroke="currentColor" stroke-width="2"/></svg></div>
+        <span class="cat-name"><span class="zh">DC<br>插座</span><span class="en block">DC<br>Jack</span></span>
+      </a>
+
+      <!-- 7. 卡座系列 -->
+      <a class="cat-item" href="#" data-cat="card-holder">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="14" y="20" width="36" height="24" rx="3" stroke="currentColor" stroke-width="2"/><rect x="20" y="26" width="24" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M20 44v4h24v-4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">卡座<br>系列</span><span class="en block">Card<br>Socket</span></span>
+      </a>
+
+      <!-- 8. RF射频同轴连接器 -->
+      <a class="cat-item" href="#" data-cat="rf-coaxial">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><circle cx="26" cy="32" r="16" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="26" cy="32" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="42" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="2.5"/><rect x="56" y="24" width="8" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">RF射频<br>同轴连接器</span><span class="en block">RF Coaxial<br>Connector</span></span>
+      </a>
+
+      <!-- 9. 电池座连接器 -->
+      <a class="cat-item" href="#" data-cat="battery-holder">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="18" y="22" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/><rect x="28" y="18" width="8" height="6" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="24" y1="29" x2="24" y2="35" stroke="currentColor" stroke-width="1.5"/><line x1="32" y1="29" x2="32" y2="35" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="29" x2="40" y2="35" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">电池座<br>连接器</span><span class="en block">Battery<br>Connector</span></span>
+      </a>
+
+      <!-- 10. HDMI连接器 -->
+      <a class="cat-item" href="#" data-cat="hdmi">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><path d="M16 24h32v16H16z" stroke="currentColor" stroke-width="2" fill="none" rx="2"/><path d="M20 28h4M20 32h8M20 36h6" stroke="currentColor" stroke-width="1.5"/><path d="M48 28h4v8h-4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">HDMI<br>连接器</span><span class="en block">HDMI<br>Connector</span></span>
+      </a>
+
+      <!-- 11. 耳机插座 -->
+      <a class="cat-item" href="#" data-cat="earphone-jack">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><circle cx="28" cy="32" r="16" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="28" cy="32" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="44" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="2.5"/><rect x="56" y="26" width="6" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">耳机<br>插座</span><span class="en block">Audio<br>Jack</span></span>
+      </a>
+
+      <!-- 12. AC/DC电源连接器 -->
+      <a class="cat-item" href="#" data-cat="ac-dc-power">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><circle cx="24" cy="32" r="10" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="24" cy="32" r="3" fill="currentColor" opacity=".25"/><circle cx="44" cy="32" r="10" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="44" cy="32" r="3" fill="currentColor" opacity=".25"/><path d="M34 32h4" stroke="currentColor" stroke-width="2"/></svg></div>
+        <span class="cat-name"><span class="zh">AC/DC<br>电源连接器</span><span class="en block">AC/DC<br>Power</span></span>
+      </a>
+
+      <!-- 13. 圆形连接器 -->
+      <a class="cat-item" href="#" data-cat="circular">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="32" cy="32" r="14" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="32" cy="32" r="8" stroke="currentColor" stroke-width="1" fill="none"/><circle cx="32" cy="32" r="3" fill="currentColor" opacity=".2"/></svg></div>
+        <span class="cat-name"><span class="zh">圆形<br>连接器</span><span class="en block">Circular<br>Connector</span></span>
+      </a>
+
+      <!-- 14. 端子台 -->
+      <a class="cat-item" href="#" data-cat="terminal-block">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="14" y="22" width="36" height="20" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="32" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="40" cy="32" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M20 42v6M32 42v6M44 42v6" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">端子台/<br>接线端子</span><span class="en block">Terminal<br>Block</span></span>
+      </a>
+
+      <!-- 15. 汽车连接器 -->
+      <a class="cat-item" href="#" data-cat="automotive">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><path d="M10 38L18 24h28l8 14v8H10z" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="20" cy="42" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="44" cy="42" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M22 24v-4a4 4 0 014-4h12a4 4 0 014 4v4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="cat-name"><span class="zh">汽车<br>连接器</span><span class="en block">Automotive<br>Connector</span></span>
+      </a>
+
+      <!-- 16. I/O连接器 -->
+      <a class="cat-item" href="#" data-cat="io-connector">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="12" y="24" width="40" height="16" rx="2" stroke="currentColor" stroke-width="2"/><line x1="18" y1="28" x2="18" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="24" y1="28" x2="24" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="30" y1="28" x2="30" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="36" y1="28" x2="36" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="42" y1="28" x2="42" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="48" y1="28" x2="48" y2="36" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">I/O<br>连接器</span><span class="en block">I/O<br>Connector</span></span>
+      </a>
+
+      <!-- 17. 天线连接器 -->
+      <a class="cat-item" href="#" data-cat="antenna">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><line x1="20" y1="48" x2="20" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="20" cy="18" r="3" fill="currentColor" opacity=".3"/><line x1="20" y1="28" x2="36" y2="20" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="36" x2="40" y2="28" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="44" x2="42" y2="38" stroke="currentColor" stroke-width="1.5"/><rect x="44" y="32" width="12" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">天线<br>连接器</span><span class="en block">Antenna<br>Connector</span></span>
+      </a>
+
+      <!-- 18. PCB插座 -->
+      <a class="cat-item" href="#" data-cat="pcb-socket">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="16" y="22" width="32" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="22" y1="26" x2="22" y2="38" stroke="currentColor" stroke-width="1.5"/><line x1="28" y1="26" x2="28" y2="38" stroke="currentColor" stroke-width="1.5"/><line x1="34" y1="26" x2="34" y2="38" stroke="currentColor" stroke-width="1.5"/><line x1="40" y1="26" x2="40" y2="38" stroke="currentColor" stroke-width="1.5"/><path d="M24 42v4h16v-4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">PCB<br>插座</span><span class="en block">PCB<br>Socket</span></span>
+      </a>
+
+      <!-- 19. 工业连接器 -->
+      <a class="cat-item" href="#" data-cat="industrial">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="14" y="20" width="36" height="24" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><rect x="20" y="26" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="34" y="26" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M24 44v4M40 44v4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <span class="cat-name"><span class="zh">工业<br>连接器</span><span class="en block">Industrial<br>Connector</span></span>
+      </a>
+
+      <!-- 20. 光纤连接器 -->
+      <a class="cat-item" href="#" data-cat="fiber">
+        <div class="cat-icon"><svg viewBox="0 0 64 64"><rect x="20" y="18" width="24" height="28" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="32" cy="32" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="44" y1="32" x2="54" y2="32" stroke="currentColor" stroke-width="2"/><path d="M54 26l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="cat-name"><span class="zh">光纤<br>连接器</span><span class="en block">Fiber Optic<br>Connector</span></span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCT LIST CARDS ═══ -->
+<section class="prod-section">
+  <div class="wrap">
+    <div class="section-title"><span class="zh">全部产品</span><span class="en">All Products</span></div>
+
+    <div class="prod-list" id="staticProdList">
+
+      <!-- ══ 产品卡片 1 ══ -->
+      <a href="product-detail.html?id=JY-WTB-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="30" y="25" width="45" height="35" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><rect x="39" y="35" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><rect x="51" y="35" width="8" height="9" rx="1" fill="currentColor" opacity=".2"/><path d="M75 42h25" stroke="currentColor" stroke-width="2"/><rect x="100" y="25" width="32" height="35" rx="3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="112" cy="37" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="122" cy="37" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">线对板连接器 XH2.54-2P 卧式</span><span class="en block">WTB Connector XH2.54-2P Horizontal</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">2.54mm Pitch / 2Pin / PA66</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-XH2.54-2P-WT</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">3000/盘</span>
+          </div>
+          <p class="prod-desc"><span class="zh">XH系列线对板连接器，2.54mm标准间距，卧式贴片型，适用于家电控制板、LED驱动、电源模块等应用。耐温 -40°C ~ +105°C，符合 UL94 V-0 阻燃等级。</span><span class="en block">XH series wire-to-board connector with 2.54mm standard pitch, horizontal SMT type. Suitable for appliance control boards, LED drivers and power modules. Operating temp -40°C ~ +105°C, UL94 V-0 rated.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 2 ══ -->
+      <a href="product-detail.html?id=JY-BTB-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="22" y="38" width="38" height="24" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="98" y="38" width="38" height="24" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M60 50h38M79 43l6 7-6 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">板对板连接器 0.8mm间距 40Pin</span><span class="en block">BTB Connector 0.8mm Pitch 40Pin</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">0.8mm Pitch / 40Pin / LCP</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-BTB-080-40-H3.0</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">500/盘</span>
+          </div>
+          <p class="prod-desc"><span class="zh">窄间距板对板连接器，0.8mm精细间距，堆叠高度3.0mm，适用于智能手机、平板电脑、可穿戴设备等高密度PCB互连。支持高速信号传输，阻抗匹配设计。</span><span class="en block">Fine-pitch board-to-board connector with 0.8mm pitch, stacking height 3.0mm. Ideal for smartphones, tablets and wearables. Supports high-speed signal transmission with impedance matching.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 3 ══ -->
+      <a href="product-detail.html?id=JY-USB-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="50" y="30" width="60" height="50" rx="5" stroke="currentColor" stroke-width="2" fill="none"/><rect x="62" y="44" width="36" height="14" rx="2" fill="currentColor" opacity=".15" stroke="currentColor" stroke-width="1"/><rect x="70" y="62" width="20" height="10" rx="1" fill="currentColor" opacity=".1"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">USB Type-C 母座 16Pin 贴片四脚插板</span><span class="en block">USB Type-C Receptacle 16Pin SMT 4Tab</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">USB 3.1 / 16Pin / SMT 4Tab</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-USBC-16P-S4T</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">1000/盘</span>
+          </div>
+          <p class="prod-desc"><span class="zh">USB Type-C母头连接器，16Pin配置（CC+D+/D-/VBUS+GND），贴片四脚插板固定，支持 USB 3.1 Gen1 数据传输和 PD 快充协议。兼容正反插拔。</span><span class="en block">USB Type-C female receptacle, 16-pin config (CC+D+/D-/VBUS+GND), SMT with 4 through-hole tabs for retention. Supports USB 3.1 Gen1 data and PD fast charging. Reversible plug orientation.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 4 ══ -->
+      <a href="product-detail.html?id=JY-FFC-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="20" y="40" width="50" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="28" y1="46" x2="28" y2="56" stroke="currentColor" stroke-width="1.5"/><line x1="36" y1="46" x2="36" y2="56" stroke="currentColor" stroke-width="1.5"/><line x1="44" y1="46" x2="44" y2="56" stroke="currentColor" stroke-width="1.5"/><line x1="52" y1="46" x2="52" y2="56" stroke="currentColor" stroke-width="1.5"/><line x1="60" y1="46" x2="60" y2="56" stroke="currentColor" stroke-width="1.5"/><path d="M70 47h18l6 5-6 5H70" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">FPC/FFC 连接器 0.5mm 下接 24Pin</span><span class="en block">FPC/FFC Connector 0.5mm Bottom Contact 24Pin</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">0.5mm Pitch / 24Pin / Bottom Contact</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-FPC-05-24-BOT</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">2000/盘</span>
+          </div>
+          <p class="prod-desc"><span class="zh">FPC柔性扁平电缆连接器，0.5mm超细间距，下接触式（Bottom Contact），翻盖式锁紧结构。广泛用于摄像头模组、LCD显示屏、触控面板内部连接。</span><span class="en block">FPC flexible flat cable connector, 0.5mm ultra-fine pitch, bottom contact type with flip-lock mechanism. Widely used in camera modules, LCD displays and touch panel internal connections.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 5 ══ -->
+      <a href="product-detail.html?id=JY-DC-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><circle cx="75" cy="55" r="32" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="75" cy="55" r="12" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="75" cy="55" r="4" fill="currentColor" opacity=".2"/><line x1="107" y1="55" x2="138" y2="55" stroke="currentColor" stroke-width="2.5"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">DC电源插座 5.5×2.1mm 沉板式</span><spanspan class="en block">DC Power Jack 5.5×2.1mm Through-Hole</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">5.5×2.1mm / DIP / 中心针</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-DCJ-5521-DIP</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">1500/袋</span>
+          </div>
+          <p class="prod-desc"><span class="zh">直流电源插座，外径5.5mm内径2.1mm标准规格，直插式(DIP)安装，中心针带定位柱。额定电流3A，耐压30VDC。适配器、路由器、音响设备常用接口。</span><span class="en block">DC power jack, standard 5.5×2.1mm size, DIP mounting with center pin and locating post. Rated current 3A, voltage 30VDC max. Commonly used in adapters, routers and audio equipment.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 6 ══ -->
+      <a href="product-detail.html?id=JY-RF-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><circle cx="60" cy="55" r="26" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="60" cy="55" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="86" y1="55" x2="118" y2="55" stroke="currentColor" stroke-width="2.5"/><rect x="118" y="42" width="22" height="26" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="126" y1="50" x2="134" y2="50" stroke="currentColor" stroke-width="1.5"/><line x1="126" y1="55" x2="136" y2="55" stroke="currentColor" stroke-width="1.5"/><line x1="126" y1="60" x2="134" y2="60" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">SMA-KWE 公头弯式 RF连接器</span><span class="en block">SMA Male Right-Angle RF Connector</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">SMA / 50Ω / 弯式 / PCB安装</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-SMA-M-RA-PCB</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">500/袋</span>
+          </div>
+          <p class="prod-desc"><span class="zh">SMA系列射频同轴连接器，公头(KWE)弯式，50Ω特性阻抗，PCB边缘卡装。频率范围 DC~6GHz，VSWR ≤1.15@2GHz。用于WiFi模块、蓝牙天线、4G/LTE通信设备。</span><span class="en block">SMA series RF coaxial connector, male plug right-angle type, 50Ω characteristic impedance, PCB edge mount. Frequency range DC~6GHz, VSWR ≤1.15@2GHz. Used in WiFi modules, Bluetooth antennas and 4G/LTE comms equipment.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 7 ══ -->
+      <a href="product-detail.html?id=JY-WTW-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><path d="M30 30v60M130 30v60M30 60h100" stroke="currentColor" stroke-width="2.5"/><circle cx="30" cy="60" r="8" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="130" cy="60" r="8" stroke="currentColor" stroke-width="2" fill="none"/><rect x="67" y="48" width="26" height="24" rx="3" fill="currentColor" opacity=".12" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">线对线连接器 JST-VH 3.96mm 4P</span><span class="en block">Wire-to-Wire Connector JST-VH 3.96mm 4P</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">3.96mm Pitch / 4Pin / PA66</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-VH-396-4P</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">2000/包</span>
+          </div>
+          <p class="prod-desc"><span class="zh">VH系列线对线连接器，3.96mm大间距，公母胶壳+端子配套，适用于工业设备、家用电器、照明灯具的内部线束连接。支持AWG #16~#22线规。</span><span class="en block">VH series wire-to-wire connector, 3.96mm large pitch, with housing & terminal sets. Suitable for industrial equipment, appliances and lighting harnesses. Supports AWG #16~#22 wire gauge.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ══ 产品卡片 8 ══ -->
+      <a href="product-detail.html?id=JY-AUTO-001" class="prod-card">
+        <div class="prod-card-img">
+          <svg class="placeholder-svg" viewBox="0 0 160 120"><path d="M25 65l12-22h56l12 22v10H25z" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="45" cy="72" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="115" cy="72" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M41 43v-6a6 6 0 016-6h26a6 6 0 016 6v6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </div>
+        <div class="prod-card-body">
+          <h3><span class="zh">汽车连接器 DJ系列 2.0mm 12路 密封型</span><span class="en block">Automotive Connector DJ Series 2.0mm 12Way Sealed</span></h3>
+          <div class="prod-specs">
+            <span class="spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span>
+            <span class="spec-value">2.0mm Pitch / 12Pin / IP67密封</span>
+            <span class="spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span>
+            <span class="spec-value">JY-DJ-20-12P-SEAL</span>
+            <span class="spec-label"><span class="zh">包装：</span><span class="en">Package:</span></span>
+            <span class="spec-value">500/盒</span>
+          </div>
+          <p class="prod-desc"><span class="zh">DJ系列汽车级防水连接器，2.0mm间距，12路端子，带二次锁止(TPA)和密封塞(IP67)。符合 USCAR-2 标准，工作温度 -40°C ~ +125°C。用于车身电子、ECU、传感器系统。</span><span class="en block">DJ series automotive waterproof connector, 2.0mm pitch, 12-way terminals with TPA and seal plugs (IP67). Compliant to USCAR-2 standard, operating temp -40°C ~ +125°C. For body electronics, ECU and sensor systems.</span></p>
+          <div class="prod-actions">
+            <span class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="zh">PDF下载</span><span class="en">PDF Download</span></span>
+            <span class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span class="zh">查看详情</span><span class="en">View Details</span></span>
+          </div>
+        </div>
+      </a>
+
+    </div><!-- /.prod-list -->
+
+    <!-- DYNAMIC PRODUCTS (CMS) -->
+    <div id="cmsProdWrap" style="display:none"></div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span class="page-btn active">1</span>
+      <a class="page-btn" href="#">2</a>
+      <a class="page-btn" href="#">3</a>
+      <a class="page-btn" href="#">4</a>
+      <a class="page-btn" href="#"><span class="zh">下一页</span><span class="en">Next</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap foot-main">
+    <div>
+      <div class="foot-logo"><img src="logo.png" alt="JAYINCO"></div>
+      <p><span class="zh">专业连接器制造商，致力为全球客户提供高可靠的互连解决方案。</span><span class="en block">Professional connector manufacturer delivering reliable interconnection solutions worldwide.</span></p>
+    </div>
+    <div>
+      <h4><span class="zh">快速链接</span><span class="en">Quick Links</span></h4>
+      <a href="index.html"><span class="zh">首页</span><span class="en">Home</span></a><a href="products.html"><span class="zh">产品中心</span><span class="en">Products</span></a><a href="about.html"><span class="zh">关于我们</span><span class="en">About Us</span></a><a href="news.html"><span class="zh">新闻中心</span><span class="en">News</span></a><a href="contact.html"><span class="zh">联系我们</span><span class="en">Contact</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">主要产品</span><span class="en">Products</span></h4>
+      <a href="products.html"><span class="zh">线对板连接器</span><span class="en">Wire-to-Board</span></a><a href="products.html"><span class="zh">板对板连接器</span><span class="en">Board-to-Board</span></a><a href="products.html"><span class="zh">USB连接器</span><span class="en">USB Connectors</span></a><a href="products.html"><span class="zh">FPC/FFC连接器</span><span class="en">FPC/FFC</span></a><a href="products.html"><span class="zh">汽车连接器</span><span class="en">Automotive</span></a>
+    </div>
+    <div>
+      <h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
+      <p style="font-weight:700;color:#e0e0e0;">JAYINCO (佳盈盛电子)</p>
+      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan<br>Guangdong, China</span></p>
+      <p>sales@jayinco.com</p>
+      <p>+86 769 XXXX XXXX</p>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>&copy; 2026 JAYINCO ��盈盛电子. <span class="zh">版权所有。</span><span class="en">All rights reserved.</span></span>
+    <span>China &middot; 中国</span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="cms-config.js"></script>
+<script src="cms-client.js"></script>
+<script src="cms.js"></script>
+</body>
+</html>
