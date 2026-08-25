@@ -284,7 +284,7 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
     }
 
     try {
-      var { error } = await window._sb.from('inquiries').insert([data]);
+      var { error } = await window.CMS.sb.from('inquiries').insert([data]);
       if(error) throw error;
       showMsg('ok', '✅ 询盘已提交成功！我们会尽快与您联系。');
       form.reset();
