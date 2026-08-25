@@ -71,8 +71,10 @@ textarea{resize:vertical;min-height:110px;}
 .submit-btn{width:100%;padding:14px;border-radius:var(--radius);font-weight:800;font-size:15px;cursor:pointer;border:2px solid var(--primary);background:var(--primary);color:#fff;transition:.2s;margin-top:8px;}
 .submit-btn:hover{background:var(--primary-d);border-color:var(--primary-d);}
 
-/* ═══ MAP PLACEHOLDER ═══ */
-.map-placeholder{margin-top:36px;border:1.5px solid var(--line);border-radius:var(--radius);height:280px;background:var(--bg2);display:grid;place-items:center;color:var(--muted);font-size:14px;}
+/* ═══ FORM FEEDBACK ═══ */
+.form-msg{margin-top:12px;padding:12px 16px;border-radius:var(--radius);font-size:14px;font-weight:600;display:none;}
+.form-msg.ok{display:block;background:#E8F5E9;color:#2E7D32;border:1px solid #A5D6A7;}
+.form-msg.err{display:block;background:#FFEBEE;color:#C62828;border:1px solid #EF9A9A;}
 
 footer{background:#111618;color:#9aa0a8;padding:52px 0 0;margin-top:40px;}
 .foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;}
@@ -170,22 +172,13 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
             <div class="ci-value" data-cms="contact_factory"><span class="zh">广东省东莞市长安镇西旺街33号</span><span class="en block">No.33 Xiwang Street, Chang'an Town, Dongguan, Guangdong, China</span></div>
           </div>
         </div>
-
-        <!-- 工作时间 -->
-        <div class="ci-item">
-          <div class="ci-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div>
-            <div class="ci-label"><span class="zh">工作时间</span><span class="en">Working Hours</span></div>
-            <div class="ci-value"><span class="zh">周一至周五：08:30 – 17:30（北京时间）<br>周六：09:00 – 12:00</span><span class="en block">Mon – Fri: 08:30 – 17:30 (CST)<br>Sat: 09:00 – 12:00</span></div>
-          </div>
-        </div>
       </div>
     </div>
 
     <!-- Right: Form -->
     <div class="form-box">
       <h3 style="margin-bottom:20px;"><span class="zh">发送询盘</span><span class="en">Send Inquiry</span></h3>
-      <form action="#" method="post">
+      <form id="inquiryForm">
         <div class="form-row">
           <div class="form-group">
             <label><span class="zh">姓名 *</span><span class="en">Name *</span></label>
@@ -222,16 +215,9 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
           <label><span class="zh">留言内容 *</span><span class="en">Message *</span></label>
           <textarea name="message" required placeholder=""></textarea>
         </div>
-        <button type="submit" class="submit-btn"><span class="zh">提交询盘 &rarr;</span><span class="en">Submit Inquiry &rarr;</span></button>
+        <button type="submit" class="submit-btn" id="submitBtn"><span class="zh">提交询盘 &rarr;</span><span class="en">Submit Inquiry &rarr;</span></button>
+        <div id="formMsg" class="form-msg"></div>
       </form>
-    </div>
-  </div>
-
-  <!-- Map Placeholder -->
-  <div class="wrap">
-    <div class="map-placeholder">
-      <span class="zh">&#128205; 地图加载区域（可接入高德/百度地图 API）</span>
-      <span class="en block">&#128205; Map Area (Amap / Baidu Maps API integration)</span>
     </div>
   </div>
 </section>
@@ -268,5 +254,52 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
 <script src="cms-config.js"></script>
 <script src="cms-client.js"></script>
 <script src="cms.js"></script>
+<script>
+/* ═══ 询盘表单提交到 Supabase inquiries 表 ═══ */
+(function(){
+  var form = document.getElementById('inquiryForm');
+  if(!form) return;
+  var msgEl = document.getElementById('formMsg');
+  var btn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    btn.disabled = true; btn.style.opacity = '.6';
+    msgEl.className = 'form-msg'; msgEl.textContent = '';
+
+    var fd = new FormData(form);
+    var data = {
+      name: (fd.get('name')||'').trim(),
+      company: (fd.get('company')||'').trim(),
+      email: (fd.get('email')||'').trim(),
+      phone: (fd.get('phone')||'').trim(),
+      subject: fd.get('subject') || '',
+      message: (fd.get('message')||'').trim()
+    };
+
+    if(!data.name || !data.email || !data.message){
+      showMsg('err', '请填写必填项（姓名、邮箱、留言内容）');
+      btn.disabled = false; btn.style.opacity = '1';
+      return;
+    }
+
+    try {
+      var { error } = await window._sb.from('inquiries').insert([data]);
+      if(error) throw error;
+      showMsg('ok', '✅ 询盘已提交成功！我们会尽快与您联系。');
+      form.reset();
+    } catch(err) {
+      console.error('Inquiry submit error:', err);
+      showMsg('err', '❌ 提交失败，请稍后重试或直接邮件联系 sales@jayinconn.com');
+    }
+    btn.disabled = false; btn.style.opacity = '1';
+  });
+
+  function showMsg(type, text){
+    msgEl.textContent = text;
+    msgEl.className = 'form-msg ' + type;
+  }
+})();
+</script>
 </body>
 </html>
