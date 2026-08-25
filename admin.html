@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JAYINCO 后台管理 | Admin</title>
+<title>JAYINCONN 后台管理 | Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#E2231A;--primary-d:#B71C1C;--bg:#f5f6f8;--card:#fff;--text:#1a1a1a;--muted:#666;--line:#e3e5e9;--radius:8px;}
@@ -91,7 +91,7 @@ a{color:var(--primary);text-decoration:none;}
   <div class="login-card">
     <div class="brand">
       <div class="logo">J</div>
-      <div><div style="font-weight:900;font-size:18px;">JAYINCO 后台</div><div class="sub">佳盈盛电子 · 内容管理系统</div></div>
+      <div><div style="font-weight:900;font-size:18px;">JAYINCONN 后台</div><div class="sub">佳盈盛电子 · 内容管理系统</div></div>
     </div>
     <div id="configWarn" class="config-warn" style="display:none;">
       ⚠️ 尚未配置 Supabase。请编辑 <b>cms-config.js</b> 填入 SUPABASE_URL 与 SUPABASE_ANON_KEY，并在 Supabase 执行 <b>supabase-schema.sql</b>。
@@ -109,7 +109,7 @@ a{color:var(--primary);text-decoration:none;}
 <!-- ═══ APP ═══ -->
 <div id="appView" style="display:none;">
   <div class="topbar">
-    <div class="l"><div class="logo">J</div><span>JAYINCO 后台管理</span></div>
+    <div class="l"><div class="logo">J</div><span>JAYINCONN 后台管理</span></div>
     <div class="r">
       <span class="u" id="userEmail"></span>
       <button class="btn btn-gray btn-sm" id="logoutBtn">退出登录</button>
@@ -640,12 +640,12 @@ async function delArticle(id){
 
 /* 导入前台 news.html 的 6 篇示例新闻（在浏览器端用已登录会话写入） */
 const SAMPLE_ARTICLES = [
-  {title_zh:"JAYINCO 推出新一代高速板对板连接器系列，支持 56Gbps 传输速率",title_en:"JAYINCO Launches New High-Speed Board-to-Board Series Supporting 56Gbps",body_zh:"【新品发布】该系列采用新型差分信号设计，最小间距 0.4mm，专为数据中心、5G 基站和高速通信设备打造。产品已通过多项可靠性测试，预计 Q3 开始批量供货。",body_en:"[New Product] Featuring novel differential signal design with 0.4mm minimum pitch, purpose-built for data centers, 5G base stations and high-speed comms equipment. Passed multiple reliability tests, mass production expected Q3.",published:true,published_at:"2026-08-12T08:00:00"},
-  {title_zh:"顺利通过 IATF16949 汽车行业质量体系认证，车规级制造能力获国际认可",title_en:"IATF16949 Automotive Certification Achieved — International Recognition for Auto-Grade Manufacturing",body_zh:"【认证】经过为期一年的严格审核，JAYINCO 正式获得 IATF16949:2016 汽车行业质量管理体系认证。这标志着公司在汽车级连接器领域的研发、生产与品质管控能力达到国际先进水平。",body_en:"[Certification] After a rigorous one-year audit, JAYINCO officially achieved IATF16949:2016 certification — marking international-level capability in automotive connector R&D, production and quality control.",published:true,published_at:"2026-06-20T08:00:00"},
-  {title_zh:"亮相 2026 慕尼黑上海电子展 (electronica China)，多款新品吸引国际买家关注",title_en:"Exhibited at electronica China 2026 — New Products Attract Global Buyer Interest",body_zh:"【展会】JAYINCO 携线对板、防水及汽车级连接器等多款新品参展，现场与来自欧美、东南亚的数十家客户达成初步合作意向。",body_en:"[Exhibition] Showcased wire-to-board, waterproof and automotive-grade connector novelties, establishing preliminary cooperation intentions with dozens of customers from Europe, Americas and Southeast Asia.",published:true,published_at:"2026-04-15T08:00:00"},
+  {title_zh:"JAYINCONN 推出新一代高速板对板连接器系列，支持 56Gbps 传输速率",title_en:"JAYINCONN Launches New High-Speed Board-to-Board Series Supporting 56Gbps",body_zh:"【新品发布】该系列采用新型差分信号设计，最小间距 0.4mm，专为数据中心、5G 基站和高速通信设备打造。产品已通过多项可靠性测试，预计 Q3 开始批量供货。",body_en:"[New Product] Featuring novel differential signal design with 0.4mm minimum pitch, purpose-built for data centers, 5G base stations and high-speed comms equipment. Passed multiple reliability tests, mass production expected Q3.",published:true,published_at:"2026-08-12T08:00:00"},
+  {title_zh:"顺利通过 IATF16949 汽车行业质量体系认证，车规级制造能力获国际认可",title_en:"IATF16949 Automotive Certification Achieved — International Recognition for Auto-Grade Manufacturing",body_zh:"【认证】经过为期一年的严格审核，JAYINCONN 正式获得 IATF16949:2016 汽车行业质量管理体系认证。这标志着公司在汽车级连接器领域的研发、生产与品质管控能力达到国际先进水平。",body_en:"[Certification] After a rigorous one-year audit, JAYINCONN officially achieved IATF16949:2016 certification — marking international-level capability in automotive connector R&D, production and quality control.",published:true,published_at:"2026-06-20T08:00:00"},
+  {title_zh:"亮相 2026 慕尼黑上海电子展 (electronica China)，多款新品吸引国际买家关注",title_en:"Exhibited at electronica China 2026 — New Products Attract Global Buyer Interest",body_zh:"【展会】JAYINCONN 携线对板、防水及汽车级连接器等多款新品参展，现场与来自欧美、东南亚的数十家客户达成初步合作意向。",body_en:"[Exhibition] Showcased wire-to-board, waterproof and automotive-grade connector novelties, establishing preliminary cooperation intentions with dozens of customers from Europe, Americas and Southeast Asia.",published:true,published_at:"2026-04-15T08:00:00"},
   {title_zh:"三期厂房正式投产，月产能提升至 5000 万件",title_en:"Phase III Facility Officially Online — Monthly Capacity Reaches 50 Million Units",body_zh:"【产能】新增 8,000 平方米自动化产线，引入 AOI 全检设备与智能仓储系统。产能翻倍的同时，交付周期缩短 30%。",body_en:"[Capacity] Added 8,000 m² of automated production lines with AOI full-inspection and smart warehousing. Capacity doubled while lead time reduced by 30%.",published:true,published_at:"2026-02-08T08:00:00"},
   {title_zh:"自主研发的 IP68 防水连接器系列通过第三方权威检测",title_en:"In-House IP68 Waterproof Connector Series Passes Third-Party Testing",body_zh:"【技术】该系列产品在浸水 72 小时、盐雾 96 小时等严苛测试中表现优异，已开始向户外照明和新能源领域客户批量供货。",body_en:"[Technology] Excelled in rigorous tests including 72-hour submersion and 96-hour salt spray. Now shipping to outdoor lighting and new energy sector customers.",published:true,published_at:"2025-11-18T08:00:00"},
-  {title_zh:"与欧洲知名工业自动化企业达成战略合作协议",title_en:"Strategic Partnership Signed with European Industrial Automation Leader",body_zh:"【合作】JAYINCO 正式成为该企业在亚太地区的指定连接器供应商，首批订单涵盖定制化板对板连接器产品。",body_en:"[Partnership] JAYINCO officially designated as the company's APAC connector supplier, with the first order covering customized board-to-board connectors.",published:true,published_at:"2025-09-05T08:00:00"}
+  {title_zh:"与欧洲知名工业自动化企业达成战略合作协议",title_en:"Strategic Partnership Signed with European Industrial Automation Leader",body_zh:"【合作】JAYINCONN 正式成为该企业在亚太地区的指定连接器供应商，首批订单涵盖定制化板对板连接器产品。",body_en:"[Partnership] JAYINCONN officially designated as the company's APAC connector supplier, with the first order covering customized board-to-board connectors.",published:true,published_at:"2025-09-05T08:00:00"}
 ];
 async function importSampleArticles(){
   if(!confirm('将前台 news.html 的 6 篇示例新闻导入数据库（去重不会重复导入）。确定？')) return;
