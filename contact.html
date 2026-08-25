@@ -50,12 +50,14 @@ p{color:var(--muted);font-size:15px;}
 /* ═══ CONTACT GRID ═══ */
 .contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;margin-top:36px;}
 
-/* ═══ INFO CARDS ═══ */
-.info-card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:28px 24px;margin-bottom:18px;display:flex;gap:16px;align-items:flex-start;}
-.info-icon{width:44px;height:44px;border-radius:10px;background:rgba(226,35,26,.08);display:grid;place-items:center;flex-shrink:0;}
-.info-icon svg{width:22px;height:22px;stroke:var(--primary);fill:none;stroke-width:1.8;}
-.info-card h4{font-size:15px;margin-bottom:4px;}
-.info-card p{font-size:13.5px;line-height:1.6;}
+/* ═══ INFO LIST (icon + label + value) ═══ */
+.contact-info-list{display:flex;flex-direction:column;gap:0;}
+.ci-item{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+.ci-item:last-child{border-bottom:none;}
+.ci-icon{width:42px;height:42px;border-radius:10px;background:#FFF3E0;display:grid;place-items:center;flex-shrink:0;}
+.ci-icon svg{width:20px;height:20px;stroke:#E65100;fill:none;stroke-width:1.8;}
+.ci-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;}
+.ci-value{font-size:15px;color:var(--muted);line-height:1.6;}
 
 /* ═══ FORM ═══ */
 .form-box{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:36px 32px;}
@@ -132,35 +134,50 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
 
     <!-- Left: Contact Info -->
     <div>
-      <div class="info-card">
-        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-        <div>
-          <h4><span class="zh">公司地址</span><span class="en">Address</span></h4>
-          <p data-cms="contact_address"><span class="zh">广东省东莞市 XX 镇工业园 XX 路 XX 号<br>邮编：523000</span><span class="en block">XX Road, XX Industrial Park<br>Dongguan, Guangdong, China 523000</span></p>
+      <div class="contact-info-list">
+        <!-- 手机号（微信同号） -->
+        <div class="ci-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+          <div>
+            <div class="ci-label"><span class="zh">手机号（微信同号）</span><span class="en">Mobile (WeChat)</span></div>
+            <div class="ci-value">18218715605</div>
+          </div>
         </div>
-      </div>
 
-      <div class="info-card">
-        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
-        <div>
-          <h4><span class="zh">电子邮箱</span><span class="en">Email</span></h4>
-          <p data-cms="contact_email">sales@jayinco.com<br>info@jayinco.com</p>
+        <!-- 邮箱 -->
+        <div class="ci-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div>
+            <div class="ci-label"><span class="zh">电子邮箱</span><span class="en">Email</span></div>
+            <div class="ci-value" data-cms="contact_email">sales@jayinconn.com</div>
+          </div>
         </div>
-      </div>
 
-      <div class="info-card">
-        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
-        <div>
-          <h4><span class="zh">联系电话</span><span class="en">Phone</span></h4>
-          <p data-cms="contact_phone"><span class="zh">电话：+86 769 XXXX XXXX<br>传真：+86 769 XXXX XXXX</span><span class="en block">Tel: +86 769 XXXX XXXX<br>Fax: +86 769 XXXX XXXX</span></p>
+        <!-- 办公地址 -->
+        <div class="ci-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div>
+            <div class="ci-label"><span class="zh">办公地址</span><span class="en">Office Address</span></div>
+            <div class="ci-value" data-cms="contact_office"><span class="zh">深圳市福田区益田路卓越时代广场二期21层</span><span class="en block">21F, Phase II, Excellence Times Plaza, Yitian Road, Futian District, Shenzhen, China</span></div>
+          </div>
         </div>
-      </div>
 
-      <div class="info-card">
-        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-        <div>
-          <h4><span class="zh">工作时间</span><span class="en">Working Hours</span></h4>
-          <p><span class="zh">周一至周五：08:30 – 17:30（北京时间）<br>周六：09:00 – 12:00</span><span class="en block">Mon – Fri: 08:30 – 17:30 (CST)<br>Sat: 09:00 – 12:00</span></p>
+        <!-- 工厂地址 -->
+        <div class="ci-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/></svg></div>
+          <div>
+            <div class="ci-label"><span class="zh">工厂地址</span><span class="en">Factory Address</span></div>
+            <div class="ci-value" data-cms="contact_factory"><span class="zh">广东省东莞市长安镇西旺街33号</span><span class="en block">No.33 Xiwang Street, Chang'an Town, Dongguan, Guangdong, China</span></div>
+          </div>
+        </div>
+
+        <!-- 工作时间 -->
+        <div class="ci-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="ci-label"><span class="zh">工作时间</span><span class="en">Working Hours</span></div>
+            <div class="ci-value"><span class="zh">周一至周五：08:30 – 17:30（北京时间）<br>周六：09:00 – 12:00</span><span class="en block">Mon – Fri: 08:30 – 17:30 (CST)<br>Sat: 09:00 – 12:00</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -237,9 +254,9 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
     <div>
       <h4><span class="zh">联系我们</span><span class="en">Contact Us</span></h4>
       <p style="font-weight:700;color:#e0e0e0;">JAYINCONN (佳盈盛电子)</p>
-      <p><span class="zh">广东省东莞市 XX 镇工业园</span><span class="en block">XX Industrial Park, Dongguan<br>Guangdong, China</span></p>
-      <p>sales@jayinco.com</p>
-      <p>+86 769 XXXX XXXX</p>
+      <p><span class="zh">深圳市福田区益田路卓越时代广场二期21层</span><span class="en block">21F, Phase II, Excellence Times Plaza<br>Futian District, Shenzhen, China</span></p>
+      <p>sales@jayinconn.com</p>
+      <p>18218715605</p>
     </div>
   </div>
   <div class="wrap foot-bottom">
