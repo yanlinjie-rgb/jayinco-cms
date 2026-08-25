@@ -132,3 +132,31 @@ insert into public.site_content (key, type, value_zh, value_en) values
   ('banner_news',         'image', '', ''),
   ('banner_contact',      'image', '', '')
 on conflict (key) do nothing;
+
+-- ═══ 4. 询盘表 inquiries（前台联系页表单提交） ═══
+create table if not exists public.inquiries (
+  id            uuid        primary key default gen_random_uuid(),
+  name          text        not null,
+  company       text        default '',
+  email         text        not null,
+  phone         text        default '',
+  subject       text        default '',
+  message       text        not null,
+  created_at    timestamptz default now()
+);
+
+create index if not exists inquiries_created_idx on public.inquiries (created_at desc);
+
+alter table public.inquiries enable row level security;
+
+-- inquiries: 公开可插入（访客提交），公开可读（后台查看），仅认证可删
+drop policy if exists "public insert inquiries" on public.inquiries;
+create policy "public insert inquiries"
+  on public.inquiries for insert with check (true);
+drop policy if exists "public read inquiries" on public.inquiries;
+create policy "public read inquiries"
+  on public.inquiries for select using (true);
+drop policy if exists "auth delete inquiries" on public.inquiries;
+create policy "auth delete inquiries"
+  on public.inquiries for delete
+  using (auth.role() = 'authenticated');
