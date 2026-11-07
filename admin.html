@@ -716,7 +716,7 @@ function viewInquiry(id){
     <div class="field"><label>留言内容 Message</label><textarea disabled style="min-height:120px;background:#fafafa">${esc(q.message)}</textarea></div>
     <div class="field"><label>提交时间 Submitted</label><input value="${time}" disabled></div>
     <div class="modal-actions">
-      <a href="mailto:${esc(q.email)}?subject=Re: 您的询盘 - JAYINCONN&body=尊敬 ${esc(q.name)}，%0D%0A%0D%0A感谢您对 JAYINCONN（佳盈盛电子）的关注！我们已收到您的询盘，将尽快回复。%0D%0A%0D%0A此致%0D%0AJAYINCONN 销售团队%0D%0Asales@jayinconn.com%0D%0A18218715605" target="_blank" class="btn">📧 回复邮件</a>
+      <a href="mailto:${esc(q.email)}?subject=Re: 您的询盘 - JAYINCONN&body=尊敬 ${esc(q.name)}，%0D%0A%0D%0A感谢您对 JAYINCONN（佳盈盛电子）的关注！我们已收到您的询盘，将尽快回复。%0D%0A%0D%0A此致%0D%0AJAYINCONN 销售团队%0D%0Ajudy@jayinconn.com" target="_blank" class="btn">📧 回复邮件</a>
       <button class="btn btn-danger" onclick="closeModal();delInquiry('${id}')">标记已处理并删除</button>
     </div>`;
   openModal();
