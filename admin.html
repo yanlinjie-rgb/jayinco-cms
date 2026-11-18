@@ -102,7 +102,7 @@ a{color:var(--primary);text-decoration:none;}
     <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
     <button class="btn block" id="loginBtn">登录后台</button>
     <div class="err" id="loginErr"></div>
-    <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">首次使用：在 Supabase 控制台 Auth → Users 创建管理员账号</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">后台账号密码由 Cloudflare Worker 的 ADMIN_PASSWORD 环境变量控制</p>
   </div>
 </div>
 
@@ -213,7 +213,7 @@ a{color:var(--primary);text-decoration:none;}
   }
 
   async function checkSession(){
-    if(!sb){ showErr('Supabase 客户端未初始化'); showLogin(); return; }
+    if(!sb){ showErr('数据接口未初始化（检查 cms-config.js 的 API_BASE）'); showLogin(); return; }
     try {
       var r = await sb.auth.getSession();
       if(r.error){ showErr('会话检查：'+r.error.message); showLogin(); return; }
@@ -237,7 +237,7 @@ a{color:var(--primary);text-decoration:none;}
 
         if(!email){ showErr('请输入邮箱'); return; }
         if(!pwd){ showErr('请输入密码'); return; }
-        if(!sb){ showErr('错误：Supabase 客户端未初始化（检查 cms-config.js）'); return; }
+        if(!sb){ showErr('错误：数据接口未初始化（检查 cms-config.js 的 API_BASE）'); return; }
 
         btn.disabled = true;
         btn.textContent = '登录中…';
