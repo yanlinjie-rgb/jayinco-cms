@@ -1,6 +1,6 @@
 /* ============================================================
  *  JAYINCONN CMS — 数据客户端（Cloudflare Worker + D1）
- *  对外暴露与 Supabase 客户端一致的接口，所以 cms.js / admin.html
+ *  对外暴露与原 Supabase 客户端一致的接口，所以 cms.js / admin.html
  *  里的 sb.from(...).select(...) 等写法完全不用改。
  *  依赖：cms-config.js（先加载）
  *  暴露：window.CMS = { sb, configured, url, brand }
