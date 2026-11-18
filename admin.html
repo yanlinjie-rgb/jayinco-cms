@@ -91,7 +91,7 @@ a{color:var(--primary);text-decoration:none;}
   <div class="login-card">
     <div class="brand">
       <div class="logo">J</div>
-      <div><div style="font-weight:900;font-size:18px;">JAYINCONN 后台</div><div class="sub">佳盈盛电子 · 内容管理系统</div></div>
+      <div><div style="font-weight:900;font-size:18px;">JAYINCONN 后台</div><div class="sub">JAYINCONN · 内容管理系统</div></div>
     </div>
     <div id="configWarn" class="config-warn" style="display:none;">
       ⚠️ 尚未配置 Supabase。请编辑 <b>cms-config.js</b> 填入 SUPABASE_URL 与 SUPABASE_ANON_KEY，并在 Supabase 执行 <b>supabase-schema.sql</b>。
@@ -716,7 +716,7 @@ function viewInquiry(id){
     <div class="field"><label>留言内容 Message</label><textarea disabled style="min-height:120px;background:#fafafa">${esc(q.message)}</textarea></div>
     <div class="field"><label>提交时间 Submitted</label><input value="${time}" disabled></div>
     <div class="modal-actions">
-      <a href="mailto:${esc(q.email)}?subject=Re: 您的询盘 - JAYINCONN&body=尊敬 ${esc(q.name)}，%0D%0A%0D%0A感谢您对 JAYINCONN（佳盈盛电子）的关注！我们已收到您的询盘，将尽快回复。%0D%0A%0D%0A此致%0D%0AJAYINCONN 销售团队%0D%0Ajudy@jayinconn.com" target="_blank" class="btn">📧 回复邮件</a>
+      <a href="mailto:${esc(q.email)}?subject=Re: 您的询盘 - JAYINCONN&body=尊敬 ${esc(q.name)}，%0D%0A%0D%0A感谢您对 JAYINCONN的关注！我们已收到您的询盘，将尽快回复。%0D%0A%0D%0A此致%0D%0AJAYINCONN 销售团队%0D%0Ajudy@jayinconn.com" target="_blank" class="btn">📧 回复邮件</a>
       <button class="btn btn-danger" onclick="closeModal();delInquiry('${id}')">标记已处理并删除</button>
     </div>`;
   openModal();
