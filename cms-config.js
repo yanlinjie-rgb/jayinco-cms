@@ -13,5 +13,5 @@ window.CMS_CONFIG = {
   BUCKET:            'cms-images',
 
   // 后台登录页提示（可选）
-  BRAND: 'JAYINCO 佳盈盛电子'
+  BRAND: 'JAYINCONN'
 };
