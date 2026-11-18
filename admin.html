@@ -94,10 +94,10 @@ a{color:var(--primary);text-decoration:none;}
       <div><div style="font-weight:900;font-size:18px;">JAYINCONN 后台</div><div class="sub">JAYINCONN · 内容管理系统</div></div>
     </div>
     <div id="configWarn" class="config-warn" style="display:none;">
-      ⚠️ 尚未配置 Supabase。请编辑 <b>cms-config.js</b> 填入 SUPABASE_URL 与 SUPABASE_ANON_KEY，并在 Supabase 执行 <b>supabase-schema.sql</b>。
+      ⚠️ 尚未配置后端。请编辑 <b>cms-config.js</b>，把 API_BASE 指向 Cloudflare Worker（默认 https://api.jayinconn.com）。
     </div>
     <label>邮箱 Email</label>
-    <input type="email" id="email" placeholder="admin@jayinco.com" autocomplete="username">
+    <input type="email" id="email" placeholder="admin@jayinconn.com" autocomplete="username">
     <label>密码 Password</label>
     <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
     <button class="btn block" id="loginBtn">登录后台</button>
@@ -168,8 +168,6 @@ a{color:var(--primary);text-decoration:none;}
 <div class="modal-bg" id="modalBg">
   <div class="modal" id="modalBox"></div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="cms-config.js"></script>
 <script src="cms-client.js"></script>
 <script>
