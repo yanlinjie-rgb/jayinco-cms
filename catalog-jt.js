@@ -76,8 +76,8 @@
     var keys = Object.keys(facets || {});
     if (!keys.length && !Object.keys(state.f).length) { box.innerHTML = ''; return; }
     var html = (Object.keys(state.f).length ? '<button class="jt-clear" id="jtClear">清除筛选 (' + Object.keys(state.f).length + ')</button>' : '');
-    html += keys.slice(0, 10).map(function (k) {
-      var vals = facets[k].slice(0, 24);
+    html += keys.slice(0, 6).map(function (k) {
+      var vals = facets[k].slice(0, 14);
       return '<div class="jt-fgroup"><div class="jt-fk">' + esc(k) + '</div><div class="jt-fv">' +
         vals.map(function (v) {
           var on = state.f[k] === v.v;
