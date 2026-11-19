@@ -129,22 +129,17 @@ footer p{font-size:13.5px;line-height:1.8;opacity:.78;}
 }
 </style>
 <style>
-/* ===== 产品中心：分类卡片 ===== */
-.jt-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px;margin:6px 0 4px}
-.jt-cat{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px 16px 14px;background:#fff;
-  border:1.5px solid var(--line);border-radius:12px;cursor:pointer;text-align:left;transition:.2s;position:relative;overflow:hidden}
-.jt-cat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:.2s}
-.jt-cat:hover{border-color:#1a56a8;box-shadow:0 6px 18px rgba(26,86,168,.10);transform:translateY(-2px)}
-.jt-cat:hover:before{background:#1a56a8}
-.jt-cat.on{border-color:#1a56a8;background:linear-gradient(180deg,#f3f8ff,#fff);box-shadow:0 6px 20px rgba(26,86,168,.14)}
-.jt-cat.on:before{background:#1a56a8}
-.jt-cat-ico{width:38px;height:38px;border-radius:10px;background:#eef4fc;color:#1a56a8;display:flex;align-items:center;justify-content:center;transition:.2s}
-.jt-cat-ico svg{width:23px;height:23px}
-.jt-cat.on .jt-cat-ico{background:#1a56a8;color:#fff}
-.jt-cat-t{font-size:14px;font-weight:700;color:var(--text);line-height:1.35}
-.jt-cat.on .jt-cat-t{color:#1a56a8}
-.jt-cat-n{font-size:12px;color:#8a94a6;font-weight:600}
-.jt-cat.on .jt-cat-n{color:#1a56a8;opacity:.8}
+/* ===== 产品中心：分类（简洁卡片） ===== */
+.jt-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:10px;margin:6px 0 4px}
+.jt-cat{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:10px;cursor:pointer;
+  transition:background .22s cubic-bezier(.4,0,.2,1),border-color .22s,color .22s,transform .22s}
+.jt-cat:hover{border-color:#1a56a8;background:#f7faff;transform:translateY(-1px)}
+.jt-cat.on{background:#1a56a8;border-color:#1a56a8}
+.jt-cat-t{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.3;transition:color .22s}
+.jt-cat.on .jt-cat-t{color:#fff}
+.jt-cat-n{font-size:12px;color:#98a2b3;font-variant-numeric:tabular-nums;flex:0 0 auto;transition:color .22s}
+.jt-cat.on .jt-cat-n{color:rgba(255,255,255,.72)}
 
 /* ===== 二级细分 ===== */
 .jt-subs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0 4px;padding-top:18px;border-top:1px solid var(--line)}
