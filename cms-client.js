@@ -170,6 +170,33 @@
     storage: { from: bucket }
   };
 
+
+  /* ---------- 语言记忆：切换一次，全站生效 ---------- */
+  (function () {
+    var KEY = 'jayin_lang';
+    function apply(v) {
+      var t = document.getElementById('langToggle');
+      if (t) t.checked = (v === 'en');
+      document.documentElement.setAttribute('data-lang', v || 'zh');
+    }
+    var cur = 'zh';
+    try { cur = localStorage.getItem(KEY) || 'zh'; } catch (e) {}
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { apply(cur); });
+    else apply(cur);
+    document.addEventListener('change', function (e) {
+      if (e.target && e.target.id === 'langToggle') {
+        var v = e.target.checked ? 'en' : 'zh';
+        try { localStorage.setItem(KEY, v); } catch (e2) {}
+        document.documentElement.setAttribute('data-lang', v);
+        document.dispatchEvent(new CustomEvent('jayin:lang', { detail: v }));
+      }
+    });
+  })();
+
+  window.JAYIN_LANG = function () {
+    try { return localStorage.getItem('jayin_lang') || 'zh'; } catch (e) { return 'zh'; }
+  };
+
   window.CMS = {
     configured: configured,
     url: BASE,
