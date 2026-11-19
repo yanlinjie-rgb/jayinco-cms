@@ -11,17 +11,7 @@
   var state = { l1: '', l2: '', c3: '', q: '', page: 1, size: PAGE_SIZE, f: {} };
   var cache = { categories: null, counts: {} };
 
-  var ICONS = [
-    /* 天线 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M24 6v8" stroke-linecap="round"/><circle cx="24" cy="17" r="3"/><path d="M17 14c-3 4-3 10 0 14M31 14c3 4 3 10 0 14" stroke-linecap="round"/><path d="M12 10c-5 6-5 16 0 22M36 10c5 6 5 16 0 22" stroke-linecap="round" opacity=".55"/><path d="M24 20v22" stroke-width="2.4" stroke-linecap="round"/></svg>',
-    /* 弹片顶针 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="14" y="30" width="20" height="9" rx="2"/><path d="M24 30V18" stroke-width="2.4" stroke-linecap="round"/><path d="M19 18h10l-5-9z"/></svg>',
-    /* 线转接 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="24" r="5"/><rect x="30" y="17" width="10" height="14" rx="2"/><path d="M17 24h13" stroke-width="2.2"/></svg>',
-    /* 滤波器 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="17" width="32" height="14" rx="3"/><path d="M15 17v14M22 17v14M29 17v14M36 17v14" opacity=".45"/></svg>',
-    /* 开关 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="16" width="30" height="16" rx="3"/><circle cx="19" cy="24" r="3"/><circle cx="29" cy="24" r="3"/><path d="M19 24h7"/></svg>',
-    /* 数据连接器 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="10" y="18" width="20" height="13" rx="2"/><path d="M30 22h4v5h-4"/><path d="M15 24v5M20 24v5M25 24v5" opacity=".5"/></svg>',
-    /* 排针排母 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="19" width="32" height="10" rx="2"/><path d="M14 19v-5M22 19v-5M30 19v-5M38 19v-5" stroke-width="2"/><path d="M14 29v5M22 29v5M30 29v5M38 29v5" stroke-width="2" opacity=".5"/></svg>',
-    /* 线束 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 16c10 0 12 16 22 16h10"/><path d="M8 32c10 0 12-16 22-16h10"/><rect x="34" y="26" width="8" height="12" rx="2"/></svg>',
-    /* 定制 */'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="24" r="6"/><path d="M24 8v5M24 35v5M8 24h5M35 24h5M13 13l3.5 3.5M31.5 31.5L35 35M35 13l-3.5 3.5M16.5 31.5L13 35" stroke-linecap="round"/></svg>'
-  ];
+
 
   function el(id) { return document.getElementById(id); }
   function esc(s) {
@@ -39,16 +29,11 @@
     var l1s = cats.filter(function (c) { return c.level === 1; });
     var allCount = Object.keys(cache.counts).reduce(function (a, k) { return a + cache.counts[k]; }, 0);
 
-    var html = '<button class="jt-cat' + (state.l1 ? '' : ' on') + '" data-l1="">' +
-      '<span class="jt-cat-ico"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="13" height="13" rx="2"/><rect x="27" y="8" width="13" height="13" rx="2"/><rect x="8" y="27" width="13" height="13" rx="2"/><rect x="27" y="27" width="13" height="13" rx="2"/></svg></span>' +
-      '<span class="jt-cat-t">全部产品</span><span class="jt-cat-n">' + allCount + '</span></button>';
+    var html = '<button class="jt-cat' + (state.l1 ? '' : ' on') + '" data-l1=""><span class="jt-cat-t">全部产品</span><span class="jt-cat-n">' + allCount + '</span></button>';
 
     html += l1s.map(function (c, i) {
       var n = cache.counts[c.name] || 0;
-      return '<button class="jt-cat' + (state.l1 === c.name ? ' on' : '') + '" data-l1="' + esc(c.name) + '">' +
-        '<span class="jt-cat-ico">' + (ICONS[i % ICONS.length] || '') + '</span>' +
-        '<span class="jt-cat-t">' + esc(c.name) + '</span>' +
-        '<span class="jt-cat-n">' + n + '</span></button>';
+      return '<button class="jt-cat' + (state.l1 === c.name ? ' on' : '') + '" data-l1="' + esc(c.name) + '"><span class="jt-cat-t">' + esc(c.name) + '</span><span class="jt-cat-n">' + n + '</span></button>';
     }).join('');
     box.innerHTML = html;
 
