@@ -44,6 +44,19 @@
       });
   }
 
+  /* 把图册里的相对图片路径改成 Worker 直出地址 */
+  function fixImg(r) {
+    if (!r || typeof r !== 'object') return r;
+    if (typeof r.image_url === 'string' && r.image_url && r.image_url.indexOf('http') !== 0) {
+      r.image_url = BASE + '/api/img?k=' + encodeURIComponent(r.image_url);
+    }
+    if (Array.isArray(r.imgs)) {
+      r.imgUrls = r.imgs.map(function (k) { return BASE + '/api/img?k=' + encodeURIComponent(k); });
+      if (!r.image_url && r.imgUrls.length) r.image_url = r.imgUrls[0];
+    }
+    return r;
+  }
+
   /* ---------- 查询构造器（thenable） ---------- */
   function Query(table) {
     this.table = table;
@@ -78,7 +91,12 @@
     };
     var needAuth = s.op !== 'select' || this.table === 'inquiries';
     call('/api/db', payload, needAuth)
-      .then(function (j) { resolve({ data: j.data, error: null, count: Array.isArray(j.data) ? j.data.length : undefined }); })
+      .then(function (j) {
+        var d = j.data;
+        if (Array.isArray(d)) d = d.map(fixImg);
+        else if (d) d = fixImg(d);
+        resolve({ data: d, error: null, count: Array.isArray(d) ? d.length : undefined });
+      })
       .catch(function (e) { resolve({ data: null, error: { message: e.message } }); });
     return this;
   };
