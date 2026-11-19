@@ -13,6 +13,21 @@
 
 
 
+
+  /* ---------- 中英 ---------- */
+  var KEYS_EN = {'频率':'Frequency','带宽':'Bandwidth','增益':'Gain','阻抗':'Impedance','尺寸':'Size',
+    '额定电压':'Rated Voltage','额定电流':'Rated Current','间距':'Pitch','工作温度':'Operating Temp.',
+    '安装方式':'Mounting','触点数量':'Contacts','排数':'Rows','插针结构':'Pin Type','连接线长':'Cable Length',
+    'IPEX代数':'IPEX Gen.','塑高':'Insulator Height','锁定特性':'Locking','产品系列':'Series','接口类型':'Interface',
+    '针脚数':'Pins','位数':'Positions','材质':'Material','颜色':'Color','封装':'Package','功率':'Power',
+    '频率范围':'Frequency Range','驻波比':'VSWR','极化':'Polarization','增益(dBi)':'Gain (dBi)',
+    '商品种类':'Product Type','圆针/方针':'Round/Square Pin','线材类型':'Cable Type','行距':'Row Pitch',
+    '板上高度':'Height Above Board','触点类型':'Contact Type','总PIN数':'Total Pins','产品类型':'Type',
+    '高度':'Height','长度':'Length','宽度':'Width','厚度':'Thickness','防水等级':'Waterproof',
+    '特性':'Features','系列':'Series','接口':'Interface','额定功率':'Rated Power','接触电阻':'Contact Resistance'};
+  function isEn() { return (window.JAYIN_LANG && window.JAYIN_LANG()) === 'en'; }
+  function klabel(k) { return isEn() ? (KEYS_EN[k] || k) : k; }
+
   function el(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -120,7 +135,7 @@
         ? '<img src="' + IMG(p.imgs[0]) + '" alt="' + esc(p.model) + '" loading="lazy" onerror="this.outerHTML=this.dataset.ph" data-ph="&lt;svg class=&quot;placeholder-svg&quot; viewBox=&quot;0 0 160 120&quot;&gt;&lt;rect x=&quot;40&quot; y=&quot;30&quot; width=&quot;80&quot; height=&quot;55&quot; rx=&quot;4&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot;/&gt;&lt;/svg&gt;">'
         : '<svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="40" y="30" width="80" height="55" rx="4" stroke="currentColor" stroke-width="2" fill="none"/></svg>';
       var specs = Object.keys(p.params || {}).slice(0, 4).map(function (k) {
-        return '<span class="jt-sp"><em>' + esc(k) + '</em>' + esc(p.params[k]) + '</span>';
+        return '<span class="jt-sp"><em>' + esc(klabel(k)) + '</em>' + esc(p.params[k]) + '</span>';
       }).join('');
       var no = (d.page - 1) * d.size + i + 1;
       return '<a href="product-detail.html?id=' + encodeURIComponent(p.id) + '" class="prod-card">' +
@@ -128,7 +143,7 @@
         '<div class="prod-card-body">' +
           '<div class="jt-card-top"><span class="jt-no">' + no + '</span>' +
             '<h3>' + esc(p.model) + '</h3></div>' +
-          '<p class="prod-desc">' + esc(p.name) + '</p>' +
+          (isEn() ? '' : '<p class="prod-desc">' + esc(p.name) + '</p>') +
           '<div class="jt-specs">' + specs + '</div>' +
           '<div class="jt-card-foot"><span class="jt-cat-tag">' + esc(p.c3 || p.l2 || p.l1) + '</span>' +
             '<span class="jt-more">查看详情 →</span></div>' +
@@ -159,7 +174,7 @@
       else parts.push('<button class="jt-pg' + (n === cur ? ' on' : '') + '" data-p="' + n + '">' + n + '</button>');
     });
     parts.push('<button class="jt-pg' + (cur >= pages ? ' dis' : '') + '" data-p="' + Math.min(pages, cur + 1) + '">下一页</button>');
-    parts.push('<span class="jt-pg-info">共 ' + d.total + ' 个型号 / ' + pages + ' 页</span>');
+    parts.push('<span class="jt-pg-info">' + (isEn() ? ('Total ' + d.total + ' models / ' + pages + ' pages') : ('共 ' + d.total + ' 个型号 / ' + pages + ' 页')) + '</span>');
     box.innerHTML = parts.join('');
     box.querySelectorAll('.jt-pg').forEach(function (b) {
       b.onclick = function () {
@@ -187,7 +202,7 @@
       renderList(d);
       renderPager(d);
       var c = el('jtCount');
-      if (c) c.textContent = '当前 ' + d.total + ' 个型号';
+      if (c) c.textContent = (isEn() ? d.total + ' models' : '当前 ' + d.total + ' 个型号');
     }).catch(function () {});
   }
 
@@ -206,6 +221,8 @@
       load();
     }).catch(function () { load(); });
   }
+
+  document.addEventListener('jayin:lang', function () { load(); });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
