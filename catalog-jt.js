@@ -48,6 +48,7 @@
   }
   function clabel(c) { return (isEn() && c.name_en) ? c.name_en : c.name; }
 
+  function T(zh, en) { return isEn() ? en : zh; }
   function el(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -64,7 +65,7 @@
     var l1s = cats.filter(function (c) { return c.level === 1; });
     var allCount = Object.keys(cache.counts).reduce(function (a, k) { return a + cache.counts[k]; }, 0);
 
-    var html = '<button class="jt-cat' + (state.l1 ? '' : ' on') + '" data-l1=""><span class="jt-cat-t">全部产品</span><span class="jt-cat-n">' + allCount + '</span></button>';
+    var html = '<button class="jt-cat' + (state.l1 ? '' : ' on') + '" data-l1=""><span class="jt-cat-t">' + T('全部产品','All Products') + '</span><span class="jt-cat-n">' + allCount + '</span></button>';
 
     html += l1s.map(function (c, i) {
       var n = cache.counts[c.name] || 0;
@@ -87,15 +88,15 @@
     if (!state.l1) { subs.innerHTML = ''; subs.hidden = true; return; }
     subs.hidden = false;
     var l2s = cats.filter(function (c) { return c.level === 2 && c.parent === state.l1; });
-    var h = '<span class="jt-sub-label">细分</span>' +
-      '<button class="jt-sub' + (state.l2 ? '' : ' on') + '" data-l2="">全部</button>' +
+    var h = '<span class="jt-sub-label">' + T('细分','Refine') + '</span>' +
+      '<button class="jt-sub' + (state.l2 ? '' : ' on') + '" data-l2="">' + T('全部','All') + '</button>' +
       l2s.map(function (c) {
         return '<button class="jt-sub' + (state.l2 === c.name ? ' on' : '') + '" data-l2="' + esc(c.name) + '">' + esc(clabel(c)) + '</button>';
       }).join('');
     if (state.l2) {
       var l3s = cats.filter(function (c) { return c.level === 3 && c.parent === state.l1 + '/' + state.l2; });
       if (l3s.length) {
-        h += '<select id="jtL3" class="jt-sel"><option value="">全部子类（' + l3s.length + '）</option>' +
+        h += '<select id="jtL3" class="jt-sel"><option value="">' + T('全部子类（' + l3s.length + '）','All sub-categories (' + l3s.length + ')') + '</option>' +
           l3s.map(function (c) {
             return '<option value="' + esc(c.name) + '"' + (state.c3 === c.name ? ' selected' : '') + '>' +
               esc(clabel(c)) + (c.total ? '（' + c.total + '）' : '') + '</option>';
@@ -120,10 +121,10 @@
     var keys = Object.keys(facets || {});
     var picked = Object.keys(state.f);
     if (!keys.length && !picked.length) { box.innerHTML = ''; return; }
-    var html = '<div class="jt-fhead"><span>参数筛选</span>' +
-      (picked.length ? '<button class="jt-clear" id="jtClear">清除 ' + picked.length + ' 项</button>' : '') + '</div>';
+    var html = '<div class="jt-fhead"><span>' + T('参数筛选','Parameter Filter') + '</span>' +
+      (picked.length ? '<button class="jt-clear" id="jtClear">' + T('清除 ' + picked.length + ' 项', 'Clear ' + picked.length) + '</button>' : '') + '</div>';
     html += keys.slice(0, 6).map(function (k) {
-      return '<div class="jt-fgroup"><div class="jt-fk">' + esc(k) + '</div><div class="jt-fv">' +
+      return '<div class="jt-fgroup"><div class="jt-fk">' + esc(klabel(k)) + '</div><div class="jt-fv">' +
         facets[k].slice(0, 14).map(function (v) {
           var on = state.f[k] === v.v;
           return '<button class="jt-f' + (on ? ' on' : '') + '" data-k="' + esc(k) + '" data-v="' + esc(v.v) + '">' +
@@ -147,7 +148,7 @@
     var box = el('jtList');
     if (!box) return;
     if (!d.items.length) {
-      box.innerHTML = '<p style="grid-column:1/-1;padding:50px 0;text-align:center;color:#8a94a6">没有符合条件的产品，换个筛选条件试试</p>';
+      box.innerHTML = '<p style="grid-column:1/-1;padding:50px 0;text-align:center;color:#8a94a6">' + T('没有符合条件的产品，换个筛选条件试试','No products match this filter') + '</p>';
       return;
     }
     box.innerHTML = d.items.map(function (p, i) {
@@ -166,7 +167,7 @@
           (isEn() ? '' : '<p class="prod-desc">' + esc(p.name) + '</p>') +
           '<div class="jt-specs">' + specs + '</div>' +
           '<div class="jt-card-foot"><span class="jt-cat-tag">' + esc(p.c3 || p.l2 || p.l1) + '</span>' +
-            '<span class="jt-more">查看详情 →</span></div>' +
+            '<span class="jt-more">' + T('查看详情 →','View details →') + '</span></div>' +
         '</div></a>';
     }).join('');
   }
@@ -230,6 +231,7 @@
     if (!el('jtList')) return;
     var s = el('jtSearch');
     if (s) {
+      if (isEn()) s.placeholder = 'Search model / product name, e.g. JAY-ANT-2400';
       var t;
       s.oninput = function () {
         clearTimeout(t);
