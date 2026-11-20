@@ -28,6 +28,26 @@
   function isEn() { return (window.JAYIN_LANG && window.JAYIN_LANG()) === 'en'; }
   function klabel(k) { return isEn() ? (KEYS_EN[k] || k) : k; }
 
+
+  var VALS_EN = {'垂直':'Vertical','水平':'Horizontal','右旋圆极化(RHCP)':'RHCP','左旋圆极化(LHCP)':'LHCP',
+    '圆极化':'Circular','线极化':'Linear','线性':'Linear','全向':'Omni-directional','定向':'Directional',
+    '公头':'Plug','母头':'Jack','公针':'Male Pin','母座':'Female Socket','内针':'Male Pin','内孔':'Female Socket',
+    '直式':'Straight','弯式':'Right Angle','直角':'Right Angle','双排':'Dual Row','单排':'Single Row',
+    '贴片':'SMD','直插':'DIP','镀金':'Gold-plated','镀镍':'Nickel-plated','镀银':'Silver-plated',
+    '铜':'Copper','黄铜':'Brass','磷青铜':'Phosphor Bronze','不锈钢':'Stainless Steel','塑胶':'Plastic','金属':'Metal',
+    '黑色':'Black','白色':'White','红色':'Red','是':'Yes','否':'No','有':'Yes','无':'None','防水':'Waterproof',
+    '不防水':'Non-waterproof','板端':'PCB','线端':'Cable','焊线式':'Solder','插件':'Through-hole',
+    'SMA公头公针':'SMA Plug (Male Pin)','SMA内针':'SMA Male Pin','SMA内螺内针':'SMA Male / Male',
+    'SMA内螺纹公针':'SMA Female Thread Male Pin','F头公针':'F Plug'};
+  function vlabel(v) {
+    if (!isEn()) return v;
+    var s2 = String(v);
+    if (VALS_EN[s2]) return VALS_EN[s2];
+    Object.keys(VALS_EN).forEach(function (k) { s2 = s2.split(k).join(VALS_EN[k]); });
+    return s2;
+  }
+  function clabel(c) { return (isEn() && c.name_en) ? c.name_en : c.name; }
+
   function el(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -48,7 +68,7 @@
 
     html += l1s.map(function (c, i) {
       var n = cache.counts[c.name] || 0;
-      return '<button class="jt-cat' + (state.l1 === c.name ? ' on' : '') + '" data-l1="' + esc(c.name) + '"><span class="jt-cat-t">' + esc(c.name) + '</span><span class="jt-cat-n">' + n + '</span></button>';
+      return '<button class="jt-cat' + (state.l1 === c.name ? ' on' : '') + '" data-l1="' + esc(c.name) + '"><span class="jt-cat-t">' + esc(clabel(c)) + '</span><span class="jt-cat-n">' + n + '</span></button>';
     }).join('');
     box.innerHTML = html;
 
@@ -70,7 +90,7 @@
     var h = '<span class="jt-sub-label">细分</span>' +
       '<button class="jt-sub' + (state.l2 ? '' : ' on') + '" data-l2="">全部</button>' +
       l2s.map(function (c) {
-        return '<button class="jt-sub' + (state.l2 === c.name ? ' on' : '') + '" data-l2="' + esc(c.name) + '">' + esc(c.name) + '</button>';
+        return '<button class="jt-sub' + (state.l2 === c.name ? ' on' : '') + '" data-l2="' + esc(c.name) + '">' + esc(clabel(c)) + '</button>';
       }).join('');
     if (state.l2) {
       var l3s = cats.filter(function (c) { return c.level === 3 && c.parent === state.l1 + '/' + state.l2; });
@@ -78,7 +98,7 @@
         h += '<select id="jtL3" class="jt-sel"><option value="">全部子类（' + l3s.length + '）</option>' +
           l3s.map(function (c) {
             return '<option value="' + esc(c.name) + '"' + (state.c3 === c.name ? ' selected' : '') + '>' +
-              esc(c.name) + (c.total ? '（' + c.total + '）' : '') + '</option>';
+              esc(clabel(c)) + (c.total ? '（' + c.total + '）' : '') + '</option>';
           }).join('') + '</select>';
       }
     }
@@ -107,7 +127,7 @@
         facets[k].slice(0, 14).map(function (v) {
           var on = state.f[k] === v.v;
           return '<button class="jt-f' + (on ? ' on' : '') + '" data-k="' + esc(k) + '" data-v="' + esc(v.v) + '">' +
-            esc(v.v) + '<i>' + v.c + '</i></button>';
+            esc(vlabel(v.v)) + '<i>' + v.c + '</i></button>';
         }).join('') + '</div></div>';
     }).join('');
     box.innerHTML = html;
@@ -135,7 +155,7 @@
         ? '<img src="' + IMG(p.imgs[0]) + '" alt="' + esc(p.model) + '" loading="lazy" onerror="this.outerHTML=this.dataset.ph" data-ph="&lt;svg class=&quot;placeholder-svg&quot; viewBox=&quot;0 0 160 120&quot;&gt;&lt;rect x=&quot;40&quot; y=&quot;30&quot; width=&quot;80&quot; height=&quot;55&quot; rx=&quot;4&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot;/&gt;&lt;/svg&gt;">'
         : '<svg class="placeholder-svg" viewBox="0 0 160 120"><rect x="40" y="30" width="80" height="55" rx="4" stroke="currentColor" stroke-width="2" fill="none"/></svg>';
       var specs = Object.keys(p.params || {}).slice(0, 4).map(function (k) {
-        return '<span class="jt-sp"><em>' + esc(klabel(k)) + '</em>' + esc(p.params[k]) + '</span>';
+        return '<span class="jt-sp"><em>' + esc(klabel(k)) + '</em>' + esc(vlabel(p.params[k])) + '</span>';
       }).join('');
       var no = (d.page - 1) * d.size + i + 1;
       return '<a href="product-detail.html?id=' + encodeURIComponent(p.id) + '" class="prod-card">' +
