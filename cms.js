@@ -192,7 +192,7 @@
     return `<div class="cms-pcard" data-cat="${esc(p.category)}" onclick="location.href='product-detail.html?id=${esc(p.id)}'">
       <div class="cms-pcard-img">${img}</div>
       <div class="cms-pcard-body">
-        <h3><span class="zh">${esc(p.name_zh)}</span><span class="en block">${esc(p.name_en)}</span></h3>
+        <h3><span class="zh">${esc(p.name_zh)}</span><span class="en block">${esc((p.name_en || p.name_zh))}</span></h3>
         <div class="cms-specs">
           <span class="cms-spec-label"><span class="zh">规格：</span><span class="en">Spec:</span></span><span class="cms-spec-value">${esc(p.spec || '-')}</span>
           <span class="cms-spec-label"><span class="zh">型号：</span><span class="en">Model:</span></span><span class="cms-spec-value">${esc(p.model || '-')}</span>
@@ -223,7 +223,7 @@
 
     // 基本说明
     const biZh = p.basic_info_zh || `<p>${esc(p.description_zh)}</p>`;
-    const biEn = p.basic_info_en || `<p>${esc(p.description_en)}</p>`;
+    const biEn = p.basic_info_en || `<p>${esc(p.description_en || p.description_zh)}</p>`;
     // Molde Code
     const mc = Array.isArray(p.molde_code) ? p.molde_code : [];
     let mcHtml = '';
@@ -242,7 +242,7 @@
     const dimHtml = p.dimensions_img ? `<div class="cms-redlabel"><span class="zh">尺寸图</span><span class="en">Dimensions</span></div><div class="cms-stripe cms-dim"><img src="${esc(p.dimensions_img)}" alt="dimensions"></div>` : '';
     // 产品说明
     const pdZh = p.product_desc_zh || '';
-    const pdEn = p.product_desc_en || '';
+    const pdEn = p.product_desc_en || p.product_desc_zh || '';
     const pdHtml = (pdZh || pdEn) ? `<div class="cms-redlabel"><span class="zh">产品说明</span><span class="en">Description</span></div><div class="cms-stripe"><div class="cms-rich"><span class="zh">${pdZh}</span><span class="en block">${pdEn}</span></div></div>` : '';
 
     // 相关产品
