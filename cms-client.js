@@ -181,6 +181,8 @@
     }
     var cur = 'zh';
     try { cur = localStorage.getItem(KEY) || 'zh'; } catch (e) {}
+    var q = new URLSearchParams(location.search).get('lang');
+    if (q === 'en' || q === 'zh') { cur = q; try { localStorage.setItem(KEY, q); } catch (e3) {} }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { apply(cur); });
     else apply(cur);
     document.addEventListener('change', function (e) {
